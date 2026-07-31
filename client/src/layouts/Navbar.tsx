@@ -1,12 +1,11 @@
 
 function Navbar() {
   return (
-    <nav className="flex jusify-center items-center h-16 px-6 border-b">
+    <nav className="flex justify-between items-center h-16 px-6 border-b">
         <h1>FocusFlow</h1>
-        <div>
-            Theme
-
-            Avatar
+        <div className="flex gap-4">
+            <p>Theme</p>
+            <p>Avatar</p>
         </div>
     </nav>
   )
