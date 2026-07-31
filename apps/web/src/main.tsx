@@ -1,16 +1,15 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
 import { createBrowserRouter } from "react-router"
 import { RouterProvider } from 'react-router/dom'
 import DashboardPage from './pages/DashboardPage.tsx'
 import AppLayout from './layouts/AppLayout.tsx'
 import LoginPage from './pages/LoginPage.tsx'
-import TasksPage from './pages/TasksPage.tsx'
-import NotesPage from './pages/NotesPage.tsx'
 import SettingsPage from './pages/SettingsPage.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
+import ProjectsPage from './pages/ProjectsPage.tsx'
+import ProjectPage from './pages/ProjectPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,12 +21,12 @@ const router = createBrowserRouter([
         element: <DashboardPage />
       },
       {
-        path: "/tasks",
-        element: <TasksPage />
+        path: "/projects",
+        element: <ProjectsPage />
       },
       {
-        path: "/notes",
-        element: <NotesPage />
+        path: "/projects/:id",
+        element: <ProjectPage/>
       },
       {
         path: "/settings",

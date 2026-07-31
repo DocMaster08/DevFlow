@@ -3,6 +3,7 @@ import {
     CheckSquare,
     NotebookPen,
     Settings,
+    Folders,
 } from "lucide-react";
 
 export const navigation = [
@@ -12,14 +13,9 @@ export const navigation = [
         icon: LayoutDashboard,
     },
     {
-        label: "Tasks",
-        href: "/tasks",
-        icon: CheckSquare
-    },
-    {
-        label: "Notes",
-        href: "/notes",
-        icon: NotebookPen
+        label: "Projects",
+        href: "/projects",
+        icon: Folders
     },
     {
         label: "Settings",
