@@ -22,10 +22,6 @@ const router = createBrowserRouter([
         element: <DashboardPage />
       },
       {
-        path: "/login",
-        element: <LoginPage />
-      },
-      {
         path: "/tasks",
         element: <TasksPage />
       },
@@ -43,13 +39,16 @@ const router = createBrowserRouter([
       }
 
     ]
-
-  }
+  },
+  {
+    path: "/login",
+    element: <LoginPage />
+  },
 ])
 
 createRoot(document.getElementById('root')!).render(
-  
+
   <StrictMode>
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   </StrictMode>,
 )
