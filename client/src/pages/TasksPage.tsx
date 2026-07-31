@@ -1,5 +1,7 @@
+import TaskForm from "@/features/tasks/components/TaskForm"
 import TaskList from "@/features/tasks/components/TaskList"
 import { mockTasks } from "@/features/tasks/utils/mockTasks"
+import type { Task } from "@/types/task"
 import { useState } from "react"
 
 function TasksPage() {
@@ -15,9 +17,23 @@ function TasksPage() {
         }))
     }
 
+    function handleCreateTask(title: string) {
+        const newTask: Task = {
+            id: crypto.randomUUID(),
+            title,
+            status: "todo",
+            priority: "low",
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }
+
+        setTasks([...tasks, newTask]);
+    }
+
     return (
         <div className="space-y-6">
             <h1>Tasks</h1>
+            <TaskForm onCreateTask={handleCreateTask} />
             <TaskList tasks={tasks} onDeleteTask={handleDeleteTask} onToggleTask={handleToggleTask} />
         </div>
     )
