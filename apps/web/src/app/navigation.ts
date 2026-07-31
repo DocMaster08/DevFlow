@@ -1,7 +1,5 @@
 import {
     LayoutDashboard,
-    CheckSquare,
-    NotebookPen,
     Settings,
     Folders,
 } from "lucide-react";
