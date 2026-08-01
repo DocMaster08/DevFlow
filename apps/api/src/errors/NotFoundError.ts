@@ -1,5 +1,7 @@
-class NotFoundError extends Error {
+import { AppError } from "./AppError.js";
 
-    statusCode = 404;
-
+export class NotFoundError extends AppError {
+  constructor(message = "Resource not found") {
+    super(404, message);
+  }
 }
