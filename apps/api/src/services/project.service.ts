@@ -14,3 +14,14 @@ export async function createProject(data: CreateProjectDTO) {
 
   return project;
 }
+
+export async function getProjects(){
+  return prisma.project.findMany({
+    where: {
+      archived:false
+    },
+    orderBy:{
+      updatedAt:"desc"
+    }
+  })
+}
