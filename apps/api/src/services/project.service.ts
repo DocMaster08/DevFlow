@@ -1,5 +1,5 @@
 
-import {prisma} from "../config/prisma.js"
+import { prisma } from "../config/prisma.js"
 import type { CreateProjectDTO } from "../schemas/project.schema.js";
 
 export async function createProject(data: CreateProjectDTO) {
@@ -15,13 +15,21 @@ export async function createProject(data: CreateProjectDTO) {
   return project;
 }
 
-export async function getProjects(){
+export async function getProjects() {
   return prisma.project.findMany({
     where: {
-      archived:false
+      archived: false
     },
-    orderBy:{
-      updatedAt:"desc"
+    orderBy: {
+      updatedAt: "desc"
+    }
+  })
+}
+
+export async function getProject(id: string) {
+  return prisma.project.findUnique({
+    where: {
+      id,
     }
   })
 }
