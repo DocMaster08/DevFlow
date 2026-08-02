@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: "/",
+        index:true,
         element: <DashboardPage />
       },
       {
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         element: <ProjectsPage />
       },
       {
-        path: "/projects/:id",
+        path: "/projects/:projectId",
         element: <ProjectPage />
       },
       {

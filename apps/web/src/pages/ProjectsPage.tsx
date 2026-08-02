@@ -15,11 +15,15 @@ function ProjectsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <h1>Projects</h1>
-        <CreateProjectDialog/>
-      </div>
-      <ProjectList projects={data} />
+      {data &&
+        <>
+          <div className="flex items-center justify-between mb-8">
+            <h1>Projects</h1>
+            <CreateProjectDialog />
+          </div>
+          <ProjectList projects={data} />
+        </>
+      }
     </div>
   )
 }
