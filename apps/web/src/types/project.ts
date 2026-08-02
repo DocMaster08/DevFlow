@@ -5,8 +5,8 @@ export type Project = {
     color:string;
     icon:string;
     archived:boolean;
-    createdAt:Date;
-    updatedAt:Date;
+    createdAt:string;
+    updatedAt:string;
     
 
 }

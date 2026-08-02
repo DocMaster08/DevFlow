@@ -1,9 +1,8 @@
-import { Button } from "@/components/ui/button"
 import { getProjects } from "@/features/projects/api/getProjects"
 import CreateProjectDialog from "@/features/projects/components/CreateProjectDialog"
 import ProjectList from "@/features/projects/components/ProjectList"
 import { useQuery } from "@tanstack/react-query"
-import { Loader, Plus } from "lucide-react"
+import { Loader } from "lucide-react"
 
 function ProjectsPage() {
   const { data, isLoading, isError } = useQuery({
@@ -16,7 +15,7 @@ function ProjectsPage() {
 
   return (
     <div>
-      <div className="flex p-4 justify-between">
+      <div className="flex items-center justify-between mb-8">
         <h1>Projects</h1>
         <CreateProjectDialog/>
       </div>

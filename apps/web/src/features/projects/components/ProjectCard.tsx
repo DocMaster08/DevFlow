@@ -26,7 +26,7 @@ function ProjectCard({ project }: ProjectCardProps) {
                 {project.description&&<ItemDescription>{project.description}</ItemDescription>}
             </ItemContent>
             <ItemActions>
-                <Button>Action</Button>
+                <Button variant="ghost">More</Button>
             </ItemActions>
         </Item>
     )

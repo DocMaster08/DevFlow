@@ -8,7 +8,7 @@ interface ProjectListProps {
 function ProjectList({projects}:ProjectListProps) {
   return (
     <div className="flex flex-col gap-4">
-        {projects.map(project => <ProjectCard project={project}/>)}
+        {projects.map(project => <ProjectCard key={project.id} project={project}/>)}
       </div>
   )
 }

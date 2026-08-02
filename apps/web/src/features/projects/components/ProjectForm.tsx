@@ -1,6 +1,7 @@
 import {
     Field,
     FieldDescription,
+    FieldError,
     FieldGroup,
     FieldLabel,
     FieldLegend,
@@ -9,47 +10,87 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
-  Popover,
-  PopoverContent,
-  PopoverDescription,
-  PopoverHeader,
-  PopoverTitle,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
-import { bgColors, colors } from "../utils/mockColors"
+import { projectColors } from "../utils/mockColors"
+import { DialogClose } from "@/components/ui/dialog"
+import { createProjectSchema, type CreateProjectDTO } from "../schemas/project.schema"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Spinner } from "@/components/ui/spinner"
 
-function ProjectForm() {
+interface ProjectFormProps {
+    onSubmit: (data: CreateProjectDTO) => void
+    isSubmitting: boolean
+}
+
+function ProjectForm({ onSubmit, isSubmitting }: ProjectFormProps) {
+    const form = useForm<CreateProjectDTO>({
+        resolver: zodResolver(createProjectSchema),
+        defaultValues: {
+            name: "",
+            description: "",
+            color: "blue",
+            icon: "folder",
+        },
+    });
+
     return (
-        <FieldSet>
-            <FieldLegend>Create New Project</FieldLegend>
-            <FieldDescription>This is where you manage your tasks.</FieldDescription>
-            <FieldGroup>
-                <Field>
-                    <FieldLabel htmlFor="name">Project name</FieldLabel>
-                    <Input id="name" autoComplete="off" placeholder="DevFlow" />
-                </Field>
-                <Field>
-                    <FieldLabel htmlFor="description">Description</FieldLabel>
-                    <Textarea id="description" />
-                </Field>
-                <Field>
-                    <FieldLabel htmlFor="color">Project Color</FieldLabel>
-                    <FieldDescription>Choose a unique color to quickly spot your project.</FieldDescription>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button variant="outline">Open Popover</Button>
-                        </PopoverTrigger>
-                        <PopoverContent>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldSet>
+                <FieldLegend>Create New Project</FieldLegend>
+                <FieldDescription>This is where you manage your tasks.</FieldDescription>
+                <FieldGroup>
+                    <Field>
+                        <FieldLabel htmlFor="name">Project name</FieldLabel>
+                        <Input {...form.register("name")} id="name" autoComplete="off" placeholder="DevFlow" />
+                        {
+                            form.formState.errors.name && (
+                                <FieldError>
+                                    {form.formState.errors.name.message}
+                                </FieldError>
+                            )
+                        }
+                    </Field>
+                    <Field>
+                        <FieldLabel htmlFor="description">Description</FieldLabel>
+                        <Textarea {...form.register("description")} id="description" />
+                    </Field>
+                    <Field>
+                        <FieldLabel htmlFor="color">Project Color</FieldLabel>
+                        <FieldDescription>Choose a unique color to quickly spot your project.</FieldDescription>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button variant="outline">Select Color</Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
                                 <div className="grid grid-cols-4">
-                                    {bgColors.map(color => <div className={`w-4 h-4 border ${color}`}></div>)}
+                                    {projectColors.map(color => <div key={color.name} className={`w-4 h-4 border ${color.className}`}></div>)}
                                 </div>
-                        </PopoverContent>
-                    </Popover>
-                </Field>
-            </FieldGroup>
-        </FieldSet>
+                            </PopoverContent>
+                        </Popover>
+                    </Field>
+                    <Field orientation="horizontal">
+                        <Button type="submit" disabled={isSubmitting}>
+                            {
+                                isSubmitting
+                                    ? <><Spinner/> Creating...</>
+                                    : "Create Project"
+                            }
+                        </Button>
+                        <DialogClose asChild>
+                            <Button variant="outline" type="button">Cancel</Button>
+                        </DialogClose>
+                    </Field>
+                </FieldGroup>
+            </FieldSet>
+        </form>
     )
 }
 
 export default ProjectForm
+
+
