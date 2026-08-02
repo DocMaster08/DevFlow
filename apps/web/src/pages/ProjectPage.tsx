@@ -1,16 +1,11 @@
 import { Spinner } from "@/components/ui/spinner";
-import { getProject } from "@/features/project/api/getProject"
+import { useProject } from "@/features/project/hooks/useProject";
 import ProjectCard from "@/features/projects/components/ProjectCard";
-import { useQuery } from "@tanstack/react-query"
 import { useParams } from "react-router"
 
 function ProjectPage() {
   const { projectId } = useParams()
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["project", projectId],
-    queryFn: () => getProject(projectId),
-    enabled: !!projectId,
-  });
+  const { data, isLoading, isError } = useProject(projectId)
 
   if (isLoading) {
     return <Spinner />
@@ -25,7 +20,7 @@ function ProjectPage() {
       {data &&
         <ProjectCard project={data} />
       }
-      
+
     </div>
   )
 }

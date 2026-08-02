@@ -1,15 +1,10 @@
-import { getProjects } from "@/features/projects/api/getProjects"
 import CreateProjectDialog from "@/features/projects/components/CreateProjectDialog"
 import ProjectList from "@/features/projects/components/ProjectList"
-import { useQuery } from "@tanstack/react-query"
+import { useProjects } from "@/features/projects/hooks/useProjects"
 import { Loader } from "lucide-react"
 
 function ProjectsPage() {
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["projects"],
-    queryFn: getProjects,
-  })
-
+  const { data, isLoading, isError } = useProjects()
   if (isLoading) return <Loader />
   if (isError) return <h1>Problem getting projects</h1>
 
