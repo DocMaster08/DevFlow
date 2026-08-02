@@ -1,0 +1,2 @@
+export const colors = ['red', 'blue', 'yellow', 'orange', 'black', 'white', 'gray', 'pink', 'purple','magenta','green','lime','lightblue']
+export const bgColors = colors.map(color => {return `bg-${color}-500`}) 
