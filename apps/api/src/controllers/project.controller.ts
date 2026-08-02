@@ -1,9 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import { createProjectSchema } from "../schemas/project.schema.js";
 import { createProject, getProject, getProjects } from "../services/project.service.js";
-import { isStringObject } from "node:util/types";
-import { string } from "zod";
 import { NotFoundError } from "../errors/NotFoundError.js";
+import { InvalidIdError } from "../errors/InvalidIdError.js";
 
 export async function createProjectController(
   req: Request,
@@ -32,9 +31,11 @@ export async function getProjectController(
   res: Response,
 ) {
 
-  const { id } = req.params;
-  if (!id || typeof id !== "string") return res.status(400).json({message: "Invalid id"})
-  const project = await getProject(id);
+  const { projectId } = req.params;
+  if (!projectId || Array.isArray(projectId)) {
+    throw new InvalidIdError("Invalid Project id")
+  }
+  const project = await getProject(projectId);
   if (!project) {
     throw new NotFoundError("Project not found")
   }
