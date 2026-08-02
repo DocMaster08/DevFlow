@@ -11,6 +11,7 @@ import SettingsPage from './pages/SettingsPage.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
 import ProjectsPage from './pages/ProjectsPage.tsx'
 import ProjectPage from './pages/ProjectPage.tsx'
+import { Toaster } from './components/ui/sonner.tsx'
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <Toaster/>
     </QueryClientProvider>
   </StrictMode>,
 )

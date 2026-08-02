@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProject } from "../api/createProject";
+import { toast } from "sonner";
 
 export function useCreateProject() {
     const queryClient = useQueryClient();
@@ -10,6 +11,11 @@ export function useCreateProject() {
             queryClient.invalidateQueries({
                 queryKey: ["projects"],
             });
+
+            toast.success("Project created successfully")
         },
+        onError: () => {
+            toast.error("Failed to create project")
+        }
     });
 }
