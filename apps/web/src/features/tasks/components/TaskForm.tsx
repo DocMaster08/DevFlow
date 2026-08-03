@@ -86,7 +86,7 @@ function TaskForm({ onSubmit, isSubmitting }: TaskFormProps) {
                                         aria-invalid={fieldState.invalid}
                                         className="min-w-30"
                                     >
-                                        <SelectValue placeholder="Select" />
+                                        <SelectValue placeholder="Priority" />
                                     </SelectTrigger>
                                     <SelectContent position="item-aligned">
                                         <SelectItem value="LOW">Low</SelectItem>

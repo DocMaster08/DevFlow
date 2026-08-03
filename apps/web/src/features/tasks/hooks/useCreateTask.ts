@@ -15,6 +15,7 @@ export function useCreateTask(projectId:string){
             })
 
             toast.success("Task Created Successfully")
+
         },
         onError: () => {
             toast.error("Failed to create Task")
