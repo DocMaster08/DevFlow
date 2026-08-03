@@ -1,11 +1,12 @@
-import {z} from "zod"
-import { TaskPriority } from "../generated/prisma/enums.js"
+import { taskPriorityEnum } from "@/types/task"
+import z from "zod"
+
 
 export const createTaskSchema = z.object(
     {
-        title: z.string().min(3).max(30),
+        title: z.string().min(3, "Title is required (min 3 chars)").max(30),
         description: z.string().min(3).max(300).optional(),
-        priority: z.enum(TaskPriority).optional(),
+        priority: z.enum(taskPriorityEnum).optional(),
         dueDate: z.string().datetime().optional()
     }
 )

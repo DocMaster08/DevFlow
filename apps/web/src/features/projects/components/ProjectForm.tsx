@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { projectColors } from "../utils/mockColors"
 import { DialogClose } from "@/components/ui/dialog"
-import { createProjectSchema, type CreateProjectDTO } from "../schemas/project.schema"
+import { createProjectSchema, type CreateProjectDTO } from "../schemas/createProject.schema"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Spinner } from "@/components/ui/spinner"

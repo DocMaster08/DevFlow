@@ -7,7 +7,7 @@ import {
 import { Plus } from "lucide-react"
 import ProjectForm from "./ProjectForm"
 import { useCreateProject } from "../hooks/useCreateProject"
-import type { CreateProjectDTO } from "../schemas/project.schema"
+import type { CreateProjectDTO } from "../schemas/createProject.schema"
 import { useState } from "react"
 
 function CreateProjectDialog() {

@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import type { CreateProjectDTO } from "../schemas/project.schema";
+import type { CreateProjectDTO } from "../schemas/createProject.schema";
 import type { Project } from "@/types/project";
 
 export async function createProject(

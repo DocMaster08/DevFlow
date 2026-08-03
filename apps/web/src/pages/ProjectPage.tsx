@@ -1,6 +1,7 @@
 import { Spinner } from "@/components/ui/spinner";
 import { useProject } from "@/features/project/hooks/useProject";
 import ProjectCard from "@/features/projects/components/ProjectCard";
+import CreateTaskDialog from "@/features/tasks/components/CreateTaskDialog";
 import { useParams } from "react-router"
 
 function ProjectPage() {
@@ -17,8 +18,13 @@ function ProjectPage() {
 
   return (
     <div>
-      {data &&
+      {data && <>
+        <div className="flex items-center justify-between mb-8">
+          <h1>Project</h1>
+          <CreateTaskDialog projectId={projectId} />
+        </div>
         <ProjectCard project={data} />
+      </>
       }
 
     </div>

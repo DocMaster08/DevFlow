@@ -23,7 +23,7 @@ export async function createTask(projectId: string, data: createTaskDTO) {
                 title: data.title,
                 description: data.description ?? null,
                 ...data.priority && { priority: data.priority },
-                dueDate: data.dueDate ?? null,
+                dueDate: data.dueDate ? new Date(data.dueDate): null,
                 projectId
             }
         }
