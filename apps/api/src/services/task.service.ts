@@ -29,3 +29,22 @@ export async function createTask(projectId: string, data: createTaskDTO) {
         }
     )
 }
+
+export async function getTasks(projectId:string){
+    return prisma.task.findMany({
+        where: {
+            projectId
+        },
+        orderBy: {
+            dueDate: "desc"
+        }
+    })
+}
+
+export async function getTask(id:string){
+    return prisma.task.findUnique({
+        where:{
+            id
+        }
+    })
+}

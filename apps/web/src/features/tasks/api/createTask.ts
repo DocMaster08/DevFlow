@@ -4,6 +4,5 @@ import type { Task } from "@/types/task";
 
 export async function createTask(projectId: string, data: createTaskDTO) {
     const response = await api.post<Task>(`/projects/${projectId}/tasks`, data)
-    console.log(response.data)
     return response.data;
 }

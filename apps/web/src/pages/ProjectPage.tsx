@@ -1,29 +1,31 @@
 import { Spinner } from "@/components/ui/spinner";
+import ProjectHeader from "@/features/project/components/ProjectHeader";
 import { useProject } from "@/features/project/hooks/useProject";
-import ProjectCard from "@/features/projects/components/ProjectCard";
-import CreateTaskDialog from "@/features/tasks/components/CreateTaskDialog";
+import TaskList from "@/features/tasks/components/TaskList";
+import { useTasks } from "@/features/tasks/hooks/useTasks";
 import { useParams } from "react-router"
 
 function ProjectPage() {
   const { projectId } = useParams()
-  const { data, isLoading, isError } = useProject(projectId)
+  const { data: project, isLoading: isProjectLoading, isError: isProjectError } = useProject(projectId)
+  const { data: tasks, isLoading: isTasksLoading, isError: isTasksError } = useTasks(projectId)
 
-  if (isLoading) {
+
+  if (isProjectLoading || isTasksLoading) {
     return <Spinner />
   }
 
-  if (isError) {
+  if (isProjectError || isTasksError) {
     return <h1>Error getting project data</h1>
   }
 
   return (
     <div>
-      {data && <>
-        <div className="flex items-center justify-between mb-8">
-          <h1>Project</h1>
-          <CreateTaskDialog projectId={projectId} />
-        </div>
-        <ProjectCard project={data} />
+      {project && tasks && <>
+
+        <ProjectHeader project={project} />
+        <TaskList tasks={tasks}/>
+
       </>
       }
 

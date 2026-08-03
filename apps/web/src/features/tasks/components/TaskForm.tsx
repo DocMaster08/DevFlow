@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { CalendarWithTime } from "@/components/common/CalenderWithTime";
 import { Spinner } from "@/components/ui/spinner";
 import { DialogClose } from "@/components/ui/dialog";
+import { datetimeToString } from "../utils/datetimeToString";
 
 interface TaskFormProps {
     onSubmit: (data: createTaskDTO) => void
@@ -109,7 +110,7 @@ function TaskForm({ onSubmit, isSubmitting }: TaskFormProps) {
 
                                 <Popover>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline">Select Date</Button>
+                                        <Button variant="outline">{ field.value?datetimeToString(field.value):"Select Date"}</Button>
                                     </PopoverTrigger>
                                     <PopoverContent>
                                         <CalendarWithTime value={field.value} onChange={field.onChange}/>
