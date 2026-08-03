@@ -4,10 +4,10 @@ import z from "zod"
 
 export const createTaskSchema = z.object(
     {
-        title: z.string().min(3, "Title is required (min 3 chars)").max(30),
+        title: z.string("Title is Required.").min(3, "Title needs to have a minimum of three characters.").max(30),
         description: z.string().min(3).max(300).optional(),
         priority: z.enum(taskPriorityEnum).optional(),
-        dueDate: z.string().datetime().optional()
+        dueDate: z.iso.datetime().optional()
     }
 )
 
