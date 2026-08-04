@@ -1,18 +1,21 @@
 import { Outlet } from "react-router"
 import Navbar from "./Navbar"
-import Sidebar from "./Sidebar"
+import AppSidebar from "./AppSidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 
 function AppLayout() {
     return (
-        <div className="flex flex-col min-h-screen">
-            <Navbar />
+        <SidebarProvider>
             <div className="flex flex-1">
-                <Sidebar />
-                <main className="flex-1 p-6 overflow-auto">
-                    <Outlet />
-                </main>
+                <AppSidebar />
+                <div className="flex-1">
+                    <Navbar/>
+                    <main className=" p-6 overflow-auto">
+                        <Outlet />
+                    </main>
+                </div>
             </div>
-        </div>
+        </SidebarProvider>
     )
 }
 

@@ -11,7 +11,9 @@ import SettingsPage from './pages/SettingsPage.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
 import ProjectsPage from './pages/ProjectsPage.tsx'
 import ProjectPage from './pages/ProjectPage.tsx'
+import TaskPage from './pages/TaskPage.tsx'
 import { Toaster } from './components/ui/sonner.tsx'
+import { ThemeProvider } from './components/common/theme-provider.tsx'
 
 const router = createBrowserRouter([
   {
@@ -19,8 +21,12 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        index:true,
+        index: true,
         element: <DashboardPage />
+      },
+      {
+        path: "/projects/:projectId/tasks/:taskId",
+        element: <TaskPage />
       },
       {
         path: "/projects/:projectId",
@@ -53,8 +59,10 @@ createRoot(document.getElementById('root')!).render(
 
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <Toaster/>
+      <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+        <RouterProvider router={router} />
+        <Toaster />
+      </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,
 )

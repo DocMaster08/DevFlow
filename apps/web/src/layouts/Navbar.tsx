@@ -1,12 +1,19 @@
+import { AvatarDropdown } from "@/components/common/AvatarDropdown"
+import { ModeToggle } from "@/components/common/ModeToggle"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 
 function Navbar() {
   return (
     <nav className="flex justify-between items-center h-16 px-6 border-b">
-        <h1>FocusFlow</h1>
-        <div className="flex gap-4">
-            <p>Theme</p>
-            <p>Avatar</p>
-        </div>
+      <div className="flex gap-4 items-center">
+        <SidebarTrigger />
+        <h1 className="font-bold text-xl">DevFlow</h1>
+      </div>
+
+      <div className="flex gap-4 items-center">
+        <ModeToggle />
+        <AvatarDropdown/>
+      </div>
     </nav>
   )
 }

@@ -1,6 +1,5 @@
 import type { Project } from "@/types/project"
 import ProjectCard from "./ProjectCard"
-import { Link } from "react-router"
 
 interface ProjectListProps {
   projects: Project[]
@@ -8,8 +7,8 @@ interface ProjectListProps {
 
 function ProjectList({ projects }: ProjectListProps) {
   return (
-    <div className="flex flex-col gap-4">
-      {projects.map(project => <Link key={project.id} to={`/projects/${project.id}`}><ProjectCard project={project} /></Link>)}
+    <div className="grid grid-cols-4 items-center">
+      {projects.map(project => <ProjectCard key={project.id} project={project} />)}
     </div>
   )
 }

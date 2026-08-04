@@ -13,7 +13,7 @@ function ProjectsPage() {
       {data &&
         <>
           <div className="flex items-center justify-between mb-8">
-            <h1>Projects</h1>
+            <h1 className="font-semibold text-lg">Projects</h1>
             <CreateProjectDialog />
           </div>
           <ProjectList projects={data} />

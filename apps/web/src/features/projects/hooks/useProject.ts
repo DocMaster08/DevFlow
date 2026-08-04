@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProject } from "../api/getProject";
-import { projectKeys } from "../utils/queryKeys";
+import { getProject } from "../../tasks/api/getProject";
+import { projectKeys } from "../utils/queryKeys"; 
 
 export function useProject(projectId?: string) {
     return useQuery({

@@ -1,9 +1,8 @@
 import { Spinner } from "@/components/ui/spinner";
-import ProjectHeader from "@/features/project/components/ProjectHeader";
-import { useProject } from "@/features/project/hooks/useProject";
+import ProjectHeader from "@/features/tasks/components/ProjectHeader";
+import { useProject } from "@/features/projects/hooks/useProject";
 import TaskList from "@/features/tasks/components/TaskList";
 import { useTasks } from "@/features/tasks/hooks/useTasks";
-import { useState } from "react";
 import { useParams } from "react-router"
 
 function ProjectPage() {
