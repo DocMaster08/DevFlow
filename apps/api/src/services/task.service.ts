@@ -1,5 +1,5 @@
 import { prisma } from "../config/prisma.js";
-import type { createTaskDTO } from "../schemas/task.schema.js";
+import type { createTaskDTO, updateTasksDTO } from "../schemas/task.schema.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import type { TaskStatus } from "../generated/prisma/enums.js";
 
@@ -73,23 +73,28 @@ export async function getTask(id: string) {
     return task
 }
 
-export async function updateTaskStatus(id: string, status: TaskStatus) {
+export async function updateTask(id:string, data: updateTasksDTO){
     const task = await prisma.task.findUnique({
-        where: {
+        where :{
             id
         }
     })
 
-    if (!task) {
+    if (!task){
         throw new NotFoundError("Task not found")
     }
 
     return prisma.task.update({
-        where: {
+        where:{
             id
         },
-        data: {
-            status
+        data:{
+            ...(data.title && {title:data.title}),
+            ...data.description && {description:data.description},
+            ...data.dueDate && {dueDate:data.dueDate},
+            ...data.priority && {priority:data.priority},
+            ...data.status && {status:data.status}
+            
         }
     })
 }
