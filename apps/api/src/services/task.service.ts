@@ -73,7 +73,7 @@ export async function getTask(id: string) {
     return task
 }
 
-export async function updateTask(id: string, status: TaskStatus) {
+export async function updateTaskStatus(id: string, status: TaskStatus) {
     const task = await prisma.task.findUnique({
         where: {
             id

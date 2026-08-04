@@ -13,9 +13,9 @@ function TaskCard({ task }: TaskCardProps) {
 
     const updateTaskStatusMutation = useUpdateTaskStatus(task.id, task.projectId)
 
-    function handleChecked() {
+    function handleChecked(checked:boolean) {
 
-        updateTaskStatusMutation.mutate(task.status === "TODO"?"DONE":"TODO")
+        updateTaskStatusMutation.mutate(checked?"DONE":"TODO")
 
 
     }

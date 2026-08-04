@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { createProjectSchema } from "../schemas/project.schema.js";
 import { createProject, getProject, getProjects } from "../services/project.service.js";
-import { NotFoundError } from "../errors/NotFoundError.js";
 import { InvalidIdError } from "../errors/InvalidIdError.js";
 
 export async function createProjectController(
@@ -33,7 +32,7 @@ export async function getProjectController(
 
   const { projectId } = req.params;
   if (!projectId || Array.isArray(projectId)) {
-    throw new InvalidIdError("Invalid Project id")
+    throw new InvalidIdError("Invalid Project Identifier")
   }
   const project = await getProject(projectId);
   
