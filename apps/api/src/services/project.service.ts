@@ -1,9 +1,10 @@
 
 import { prisma } from "../config/prisma.js"
+import { NotFoundError } from "../errors/NotFoundError.js";
 import type { CreateProjectDTO } from "../schemas/project.schema.js";
 
 export async function createProject(data: CreateProjectDTO) {
-  const project = await prisma.project.create({
+  return prisma.project.create({
     data: {
       name: data.name,
       description: data.description ?? null,
@@ -12,7 +13,7 @@ export async function createProject(data: CreateProjectDTO) {
     },
   });
 
-  return project;
+ 
 }
 
 export async function getProjects() {
@@ -27,9 +28,15 @@ export async function getProjects() {
 }
 
 export async function getProject(id: string) {
-  return prisma.project.findUnique({
+  const project = await prisma.project.findUnique({
     where: {
       id,
     }
   })
+
+  if (!project) {
+    throw new NotFoundError("Project not found")
+  }
+
+  return project
 }

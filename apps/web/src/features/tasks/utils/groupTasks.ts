@@ -1,7 +1,7 @@
-import {  type Task } from "@/types/task";
+import {  type Task, type TaskStatus } from "@/types/task";
 
 export function groupTasks(tasks: Task[]) {
-    const group = {}
+    const group:Record<TaskStatus, Task[]> = {}
 
     tasks.forEach((task) => {
         task.status in group

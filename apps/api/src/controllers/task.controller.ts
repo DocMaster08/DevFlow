@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { createTask, getTask, getTasks } from "../services/task.service.js";
-import { createTaskSchema } from "../schemas/task.schema.js";
+import { createTask, getTask, getTasks, updateTask } from "../services/task.service.js";
+import { createTaskSchema, updateTaskStatusSchema } from "../schemas/task.schema.js";
 import { InvalidIdError } from "../errors/InvalidIdError.js";
 
 export async function createTaskController(req: Request, res: Response) {
@@ -36,6 +36,19 @@ export async function getTaskController(req: Request, res: Response) {
     }
 
     const task = await getTask(id)
+
+    res.status(200).json(task)
+}
+
+export async function updateTaskController(req: Request, res: Response){
+    const {status} = updateTaskStatusSchema.parse(req.body)
+    const {id} = req.params
+
+    if (!id || Array.isArray(id)) {
+        throw new InvalidIdError("invalid Project")
+    }
+
+    const task = await updateTask(id, status)
 
     res.status(200).json(task)
 }

@@ -36,9 +36,7 @@ export async function getProjectController(
     throw new InvalidIdError("Invalid Project id")
   }
   const project = await getProject(projectId);
-  if (!project) {
-    throw new NotFoundError("Project not found")
-  }
+  
   res.status(200).json(project);
 
 }

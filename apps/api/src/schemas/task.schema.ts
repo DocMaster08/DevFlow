@@ -1,5 +1,5 @@
 import {z} from "zod"
-import { TaskPriority } from "../generated/prisma/enums.js"
+import { TaskPriority, TaskStatus } from "../generated/prisma/enums.js"
 
 export const createTaskSchema = z.object(
     {
@@ -11,3 +11,9 @@ export const createTaskSchema = z.object(
 )
 
 export type createTaskDTO = z.infer<typeof createTaskSchema>
+
+export const updateTaskStatusSchema = z.object(
+    {
+        status: z.enum(TaskStatus)
+    }
+)
