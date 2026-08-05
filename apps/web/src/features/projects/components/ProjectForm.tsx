@@ -29,6 +29,7 @@ interface ProjectFormProps {
     isSubmitting: boolean
 }
 
+
 function ProjectForm({ onSubmit, isSubmitting }: ProjectFormProps) {
     const form = useForm<CreateProjectDTO>({
         resolver: zodResolver(createProjectSchema),
@@ -64,7 +65,7 @@ function ProjectForm({ onSubmit, isSubmitting }: ProjectFormProps) {
                             </PopoverContent>
                         </Popover>
                     </Field>
-                    
+
                     <Field orientation="horizontal">
                         <Button type="submit" disabled={isSubmitting}>
                             {

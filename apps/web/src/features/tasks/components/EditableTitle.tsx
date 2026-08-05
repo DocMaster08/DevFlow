@@ -1,79 +1,88 @@
-import { Input } from "@/components/ui/input"
-import { useEffect, useRef, useState } from "react"
-import { useUpdateTask } from "../hooks/useUpdateTask"
-import { toast } from "sonner"
+import { Input } from "@/components/ui/input";
+import { useEffect, useRef, useState } from "react";
+import { useUpdateTask } from "../hooks/useUpdateTask";
+import { toast } from "sonner";
 
 interface EditableTitleProps {
-    taskId: string
-    title: string
+  taskId: string;
+  title: string;
 }
 
 function EditableTitle({ taskId, title }: EditableTitleProps) {
-    const [editing, setEditing] = useState(false)
-    const [draftTitle, setDraftTitle] = useState(title)
-    const inputRef = useRef<HTMLInputElement>(null);
+  const [editing, setEditing] = useState(false);
+  const [draftTitle, setDraftTitle] = useState(title);
+  const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (editing && inputRef.current) {
+      inputRef.current.focus();
+      // Optional: select all text on focus
+      inputRef.current.select();
+    }
+  }, [editing]);
 
-    useEffect(() => {
-        if (editing && inputRef.current) {
-            inputRef.current.focus();
-            // Optional: select all text on focus
-            inputRef.current.select();
-        }
-    }, [editing]);
+  useEffect(() => {
+    setDraftTitle(title);
+  }, [title]);
 
-    useEffect(() => {
-        setDraftTitle(title)
-    }, [title])
+  const updateTaskMutation = useUpdateTask(taskId);
 
-    const updateTaskMutation = useUpdateTask(taskId)
+  function saveTask() {
+    if (updateTaskMutation.isPending) return;
 
-    function saveTask() {
-        if (updateTaskMutation.isPending) return;
+    const newTitle = draftTitle.trim();
 
-        const newTitle = draftTitle.trim()
-
-        if (newTitle === title) {
-            setEditing(false)
-            return
-        }
-
-        if (newTitle.length < 3) {
-            toast.error("Title must contain at least 3 characters")
-            return
-        }
-
-        updateTaskMutation.mutate(
-            { title: newTitle },
-            {
-                onSuccess() {
-                    setEditing(false)
-                }
-            }
-        )
-
+    if (newTitle === title) {
+      setEditing(false);
+      return;
     }
 
-    function handleKeyDown(e) {
-        if (e.key === "Enter") {
-            saveTask()
-        }
-        else if (e.key === "Escape") {
-            setEditing(false)
-            setDraftTitle(title)
-        }
+    if (newTitle.length < 3) {
+      toast.error("Title must contain at least 3 characters");
+      return;
     }
 
-    return (
-        <div>
-            {
-                editing ?
-                    <Input ref={inputRef} className="w-md" value={draftTitle} onChange={(e) => setDraftTitle(e.target.value)} onKeyDown={handleKeyDown} onBlur={saveTask} />
-                    :
-                    <button onClick={() => { setEditing(true) }} className="text-lg">{title}</button>
-            }
-        </div>
-    )
+    updateTaskMutation.mutate(
+      { title: newTitle },
+      {
+        onSuccess() {
+          setEditing(false);
+        },
+      },
+    );
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      saveTask();
+    } else if (e.key === "Escape") {
+      setEditing(false);
+      setDraftTitle(title);
+    }
+  }
+
+  return (
+    <div>
+      {editing ? (
+        <Input
+          ref={inputRef}
+          className="w-fit"
+          value={draftTitle}
+          onChange={(e) => setDraftTitle(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={saveTask}
+        />
+      ) : (
+        <button
+          onClick={() => {
+            setEditing(true);
+          }}
+        >
+          {title}
+        </button>
+      )}
+    </div>
+  );
 }
 
-export default EditableTitle
+export default EditableTitle;

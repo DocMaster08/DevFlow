@@ -26,6 +26,10 @@ export function useUpdateTask(id: string) {
             })
         },
 
+        onSuccess: () =>{
+            toast.success("Task updated Successfully")
+        },
+
         onError(_, __, context) {
             const {previousTask} = context??undefined
             if (previousTask) {

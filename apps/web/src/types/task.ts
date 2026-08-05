@@ -1,4 +1,4 @@
-export const taskStatusEnum = ["TODO", "IN-PROGRESS", "DONE"]
+export const taskStatusEnum = ["TODO", "IN_PROGRESS", "DONE"]
 export const taskPriorityEnum = ["LOW", "MEDIUM", "HIGH"]
 
 export type TaskStatus = typeof taskStatusEnum[number];
@@ -10,7 +10,7 @@ export interface Task {
     description?: string;
     status: TaskStatus;
     priority: TaskPriority;
-    dueDate?: Date;
+    dueDate?: string;
     projectId: string;
     createdAt: Date;
     updatedAt: Date;

@@ -35,10 +35,11 @@ function TaskCard({ task }: TaskCardProps) {
 
             </ItemContent>
             <ItemActions>
-                <Button size="sm">
-                    <Link to={`/projects/${task.projectId}/tasks/${task.id}`}>Edit</Link>
-                </Button>
-
+                <Link to={`/projects/${task.projectId}/tasks/${task.id}`}>
+                    <Button size="sm">
+                        Edit
+                    </Button>
+                </Link>
             </ItemActions>
 
         </Item>
