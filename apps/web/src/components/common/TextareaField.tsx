@@ -1,0 +1,33 @@
+import { Controller, type FieldPath, type FieldValues, type UseFormReturn } from 'react-hook-form'
+import { Field, FieldError, FieldLabel } from '../ui/field'
+import { Textarea } from '../ui/textarea'
+
+interface TextareaFieldProps<TFieldValues extends FieldValues> {
+    form: UseFormReturn<TFieldValues>
+    name: FieldPath<TFieldValues>
+    placeholder: string
+}
+
+function TextareaField<TFieldValues extends FieldValues>({ form, name, placeholder }: TextareaFieldProps<TFieldValues>) {
+    return (
+        <Controller
+            name={name}
+            control={form.control}
+            render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>{name}</FieldLabel>
+                    <Textarea
+                        {...field}
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                        placeholder={placeholder}
+                        autoComplete="off"
+                    />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+            )}
+        />
+    )
+}
+
+export default TextareaField

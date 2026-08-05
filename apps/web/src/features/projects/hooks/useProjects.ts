@@ -6,6 +6,7 @@ export function useProjects(){
     return useQuery({
     queryKey: projectKeys.all,
     queryFn: getProjects,
+    
   })
 
 }

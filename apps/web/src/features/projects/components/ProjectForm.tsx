@@ -21,6 +21,8 @@ import { createProjectSchema, type CreateProjectDTO } from "../schemas/createPro
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Spinner } from "@/components/ui/spinner"
+import InputField from "@/components/common/InputField"
+import TextareaField from "@/components/common/TextareaField"
 
 interface ProjectFormProps {
     onSubmit: (data: CreateProjectDTO) => void
@@ -44,21 +46,10 @@ function ProjectForm({ onSubmit, isSubmitting }: ProjectFormProps) {
                 <FieldLegend>Create New Project</FieldLegend>
                 <FieldDescription>This is where you manage your tasks.</FieldDescription>
                 <FieldGroup>
-                    <Field>
-                        <FieldLabel htmlFor="name">Project name</FieldLabel>
-                        <Input {...form.register("name")} id="name" autoComplete="off" placeholder="DevFlow" />
-                        {
-                            form.formState.errors.name && (
-                                <FieldError>
-                                    {form.formState.errors.name.message}
-                                </FieldError>
-                            )
-                        }
-                    </Field>
-                    <Field>
-                        <FieldLabel htmlFor="description">Description</FieldLabel>
-                        <Textarea {...form.register("description")} id="description" />
-                    </Field>
+                    <InputField form={form} name="name" placeholder="Project Name..." />
+
+                    <TextareaField form={form} name="description" placeholder="Project Description..."/>
+
                     <Field>
                         <FieldLabel htmlFor="color">Project Color</FieldLabel>
                         <FieldDescription>Choose a unique color to quickly spot your project.</FieldDescription>
@@ -73,11 +64,12 @@ function ProjectForm({ onSubmit, isSubmitting }: ProjectFormProps) {
                             </PopoverContent>
                         </Popover>
                     </Field>
+                    
                     <Field orientation="horizontal">
                         <Button type="submit" disabled={isSubmitting}>
                             {
                                 isSubmitting
-                                    ? <><Spinner/> Creating...</>
+                                    ? <><Spinner /> Creating...</>
                                     : "Create Project"
                             }
                         </Button>
