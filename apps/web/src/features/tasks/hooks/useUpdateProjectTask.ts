@@ -1,22 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { taskKeys } from "../utils/queryKeys";
 import { toast } from "sonner";
-import { updateTaskStatus } from "../api/updateTaskStatus";
-import type { Task, TaskStatus } from "@/types/task";
+import { updateTask } from "../api/updateTask";
+import type { Task } from "@/types/task";
+import type { updateTaskDTO } from "../schemas/updateTask.schema";
 
-export function useUpdateTaskStatus(id: string, projectId: string) {
+export function useUpdateProjectTask(id: string, projectId: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (status: TaskStatus) => updateTaskStatus(id, status),
-        onMutate: async (status: TaskStatus) => {
+        mutationFn: (data:updateTaskDTO) => updateTask(id, data),
+        onMutate: async (data: updateTaskDTO) => {
             await queryClient.cancelQueries({
                 queryKey: taskKeys.byProject(projectId)
             })
             const previousTasks: Task[] = queryClient.getQueryData(taskKeys.byProject(projectId))
             if (!previousTasks) return;
 
-            queryClient.setQueryData(taskKeys.byProject(projectId), previousTasks.map((task) => { return task.id === id ? { ...task, status: status } : task }))
+            queryClient.setQueryData(taskKeys.byProject(projectId), previousTasks.map((task) => { return task.id === id ? {...task, ...data} : task }))
             return {previousTasks}
         },
         onSettled: () => {
@@ -25,7 +26,8 @@ export function useUpdateTaskStatus(id: string, projectId: string) {
             })
         },
 
-        onError(_, __, {previousTasks}) {
+        onError(_, __, context) {
+            const {previousTasks} = context ?? undefined
             if (previousTasks) {
                 queryClient.setQueryData(
                     taskKeys.byProject(projectId), previousTasks

@@ -1,4 +1,5 @@
 import { Spinner } from "@/components/ui/spinner"
+import EditableTitle from "@/features/tasks/components/EditableTitle"
 import { useTask } from "@/features/tasks/hooks/useTask"
 import { useParams } from "react-router"
 
@@ -14,7 +15,7 @@ function TaskPage() {
     }
   return (
     <div className="flex flex-col gap-10">
-        <h1>{task.title}</h1>
+        <EditableTitle taskId={taskId} title={task.title}/>
         <p>{task.description}</p>
         <p>{task.priority}</p>
         <p>{task.status}</p>

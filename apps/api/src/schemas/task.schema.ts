@@ -1,9 +1,9 @@
-import {z} from "zod"
+import { z } from "zod"
 import { TaskPriority, TaskStatus } from "../generated/prisma/enums.js"
 
 const taskFieldsSchema = z.object(
     {
-        title: z.string().min(3).max(30),
+        title: z.string().min(3).max(100),
         description: z.string().min(3).max(300).optional(),
         priority: z.enum(TaskPriority).optional(),
         status: z.enum(TaskStatus).optional(),
@@ -17,6 +17,11 @@ export const createTaskSchema = taskFieldsSchema.omit({
 
 export type createTaskDTO = z.infer<typeof createTaskSchema>
 
-export const updateTaskSchema = taskFieldsSchema.partial();
+export const updateTaskSchema = taskFieldsSchema.partial().refine(
+    data => Object.keys(data).length > 0,
+    {
+        message: "At least one field is required"
+    }
+);
 
-export type updateTasksDTO = z.infer<typeof updateTaskSchema>
+export type updateTaskDTO = z.infer<typeof updateTaskSchema>

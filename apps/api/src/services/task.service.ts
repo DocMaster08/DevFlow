@@ -1,8 +1,7 @@
 import { prisma } from "../config/prisma.js";
-import type { createTaskDTO, updateTasksDTO } from "../schemas/task.schema.js";
+import type { createTaskDTO, updateTaskDTO } from "../schemas/task.schema.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
-import type { TaskStatus } from "../generated/prisma/enums.js";
-
+import { removeUndefined } from "../utils/cleanData.js";
 
 export async function createTask(projectId: string, data: createTaskDTO) {
     const project = await prisma.project.findUnique({
@@ -73,28 +72,23 @@ export async function getTask(id: string) {
     return task
 }
 
-export async function updateTask(id:string, data: updateTasksDTO){
+export async function updateTask(id: string, data: updateTaskDTO) {
     const task = await prisma.task.findUnique({
-        where :{
+        where: {
             id
         }
     })
 
-    if (!task){
+    if (!task) {
         throw new NotFoundError("Task not found")
     }
 
+    const cleanData = removeUndefined(data)
+
     return prisma.task.update({
-        where:{
+        where: {
             id
         },
-        data:{
-            ...(data.title && {title:data.title}),
-            ...data.description && {description:data.description},
-            ...data.dueDate && {dueDate:data.dueDate},
-            ...data.priority && {priority:data.priority},
-            ...data.status && {status:data.status}
-            
-        }
+        data: cleanData
     })
 }
