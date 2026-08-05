@@ -14,7 +14,7 @@ export function useUpdateTask(id: string) {
             await queryClient.cancelQueries({
                 queryKey: taskKeys.byId(id)
             })
-            const previousTask: Task = queryClient.getQueryData(taskKeys.byId(id))
+            const previousTask = queryClient.getQueryData<Task>(taskKeys.byId(id))
             if (!previousTask) return;
 
             queryClient.setQueryData(taskKeys.byId(id), {...previousTask, ...data})

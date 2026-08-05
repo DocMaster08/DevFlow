@@ -14,7 +14,7 @@ export function useUpdateProjectTask(id: string, projectId: string) {
             await queryClient.cancelQueries({
                 queryKey: taskKeys.byProject(projectId)
             })
-            const previousTasks: Task[] = queryClient.getQueryData(taskKeys.byProject(projectId))
+            const previousTasks = queryClient.getQueryData<Task[]>(taskKeys.byProject(projectId))
             if (!previousTasks) return;
 
             queryClient.setQueryData(taskKeys.byProject(projectId), previousTasks.map((task) => { return task.id === id ? {...task, ...data} : task }))

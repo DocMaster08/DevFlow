@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input"
-import { useEffect, useRef, useState, type BaseSyntheticEvent, type SyntheticEvent } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useUpdateTask } from "../hooks/useUpdateTask"
+import { toast } from "sonner"
 
 interface EditableTitleProps {
     taskId: string
@@ -10,7 +11,8 @@ interface EditableTitleProps {
 function EditableTitle({ taskId, title }: EditableTitleProps) {
     const [editing, setEditing] = useState(false)
     const [draftTitle, setDraftTitle] = useState(title)
-    const inputRef = useRef(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
 
     useEffect(() => {
         if (editing && inputRef.current) {
@@ -20,12 +22,35 @@ function EditableTitle({ taskId, title }: EditableTitleProps) {
         }
     }, [editing]);
 
+    useEffect(() => {
+        setDraftTitle(title)
+    }, [title])
+
     const updateTaskMutation = useUpdateTask(taskId)
 
     function saveTask() {
-        setEditing(false)
-        if (title === draftTitle.trim()) return
-        updateTaskMutation.mutate({ title: draftTitle })
+        if (updateTaskMutation.isPending) return;
+
+        const newTitle = draftTitle.trim()
+
+        if (newTitle === title) {
+            setEditing(false)
+            return
+        }
+
+        if (newTitle.length < 3) {
+            toast.error("Title must contain at least 3 characters")
+            return
+        }
+
+        updateTaskMutation.mutate(
+            { title: newTitle },
+            {
+                onSuccess() {
+                    setEditing(false)
+                }
+            }
+        )
 
     }
 
