@@ -1,18 +1,18 @@
-import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 import { toast } from "sonner";
+import { Textarea } from "@/components/ui/textarea";
 import { Edit } from "lucide-react";
 
-interface EditableTitleProps {
+interface EditableDescriptionProps {
   taskId: string;
-  title: string;
+  description: string;
 }
 
-function EditableTitle({ taskId, title }: EditableTitleProps) {
+function EditableDescription({ taskId, description }: EditableDescriptionProps) {
   const [editing, setEditing] = useState(false);
-  const [draftTitle, setDraftTitle] = useState(title);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [draftDescription, setDraftDescription] = useState(description);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (editing && inputRef.current) {
@@ -23,28 +23,28 @@ function EditableTitle({ taskId, title }: EditableTitleProps) {
   }, [editing]);
 
   useEffect(() => {
-    setDraftTitle(title);
-  }, [title]);
+    setDraftDescription(description);
+  }, [description]);
 
   const updateTaskMutation = useUpdateTask(taskId);
 
   function saveTask() {
     if (updateTaskMutation.isPending) return;
 
-    const newTitle = draftTitle.trim();
+    const newDescription = draftDescription.trim();
 
-    if (newTitle === title) {
+    if (newDescription === description) {
       setEditing(false);
       return;
     }
 
-    if (newTitle.length < 3) {
-      toast.error("Title must contain at least 3 characters");
+    if (newDescription.length > 0 && newDescription.length < 3) {
+      toast.error("Description must contain at least 3 characters");
       return;
     }
 
     updateTaskMutation.mutate(
-      { title: newTitle },
+      { description: newDescription },
       {
         onSuccess() {
           setEditing(false);
@@ -53,38 +53,44 @@ function EditableTitle({ taskId, title }: EditableTitleProps) {
     );
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter") {
       saveTask();
     } else if (e.key === "Escape") {
       setEditing(false);
-      setDraftTitle(title);
+      setDraftDescription(description);
     }
   }
 
   return (
     <div>
       {editing ? (
-        <Input
+        <Textarea
           ref={inputRef}
           className="w-fit"
-          value={draftTitle}
-          onChange={(e) => setDraftTitle(e.target.value)}
+          value={draftDescription}
+          onChange={(e) => setDraftDescription(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={saveTask}
         />
       ) : (
-        <button className="text-xl font-semibold flex items-center gap-2"
+        <button
+        className="text-primary text-left"
           onClick={() => {
             setEditing(true);
           }}
         >
-          {title}
-          <Edit size={18}/>
+          <p className="max-w-2/3">
+            {description}
+            <span className="inline-flex items-center align-middle ml-1">
+              <Edit size={14} />
+            </span>
+          </p>
+          
         </button>
       )}
     </div>
   );
 }
 
-export default EditableTitle;
+export default EditableDescription;

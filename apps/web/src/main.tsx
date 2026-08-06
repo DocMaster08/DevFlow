@@ -11,7 +11,7 @@ import SettingsPage from './pages/SettingsPage.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
 import ProjectsPage from './pages/ProjectsPage.tsx'
 import ProjectPage from './pages/ProjectPage.tsx'
-import TaskPage from './pages/TaskPage.tsx'
+import TaskDetailsPage from './pages/TaskDetailsPage.tsx'
 import { Toaster } from './components/ui/sonner.tsx'
 import { ThemeProvider } from './components/common/theme-provider.tsx'
 
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/projects/:projectId/tasks/:taskId",
-        element: <TaskPage />
+        element: <TaskDetailsPage />
       },
       {
         path: "/projects/:projectId",

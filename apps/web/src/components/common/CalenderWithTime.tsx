@@ -1,6 +1,5 @@
 import { Clock2Icon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import { useState } from "react"

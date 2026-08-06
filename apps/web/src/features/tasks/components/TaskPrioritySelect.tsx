@@ -13,7 +13,7 @@ function TaskPrioritySelect({ taskId, priority }: TaskPrioritySelectProps) {
 
     const updateTaskMutation = useUpdateTask(taskId);
 
-    function handlePriorityChange(value: string) {
+    function handlePriorityChange(value: TaskPriority) {
         updateTaskMutation.mutate({ priority: value }
 
         )

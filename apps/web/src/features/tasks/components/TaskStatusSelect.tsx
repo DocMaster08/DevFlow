@@ -13,7 +13,7 @@ function TaskStatusSelect({ taskId, status }: TaskStatusSelectProps) {
 
     const updateTaskMutation = useUpdateTask(taskId);
 
-    function handleStatusChange(value: string) {
+    function handleStatusChange(value: TaskStatus) {
         updateTaskMutation.mutate({ status: value }
 
         )
