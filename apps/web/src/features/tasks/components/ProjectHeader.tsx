@@ -8,7 +8,7 @@ interface ProjectHeaderProps {
 function ProjectHeader({project}:ProjectHeaderProps) {
     return (
         <div className='flex justify-between items-center mb-8 w-full'>
-            <h1>{project.name}</h1>
+            <h1 className='font-semibold text-xl'>{project.name}</h1>
             <CreateTaskDialog projectId={project.id} />
         </div>
     )

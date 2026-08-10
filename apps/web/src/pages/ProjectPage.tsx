@@ -25,6 +25,7 @@ function ProjectPage() {
       {project && tasks && <>
 
         <ProjectHeader project={project} />
+        <p className="mb-4">{project.description}</p>
         <TaskList tasks={tasks} />
 
       </>
