@@ -4,7 +4,7 @@ export const taskPriorityEnum = ["LOW", "MEDIUM", "HIGH"]
 export type TaskStatus = typeof taskStatusEnum[number];
 export type TaskPriority = typeof taskPriorityEnum[number];
 
-export interface Task {
+export type Task = {
     id: string;
     title: string;
     description?: string;
@@ -12,6 +12,6 @@ export interface Task {
     priority: TaskPriority;
     dueDate?: string;
     projectId: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
 }
