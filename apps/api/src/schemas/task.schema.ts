@@ -4,7 +4,7 @@ import { TaskPriority, TaskStatus } from "../generated/prisma/enums.js"
 const taskFieldsSchema = z.object(
     {
         title: z.string().min(3).max(100),
-        description: z.string().min(3).max(300).optional(),
+        description: z.string().min(3).max(300).optional().nullable(),
         priority: z.enum(TaskPriority).optional(),
         status: z.enum(TaskStatus).optional(),
         dueDate: z.iso.datetime().optional()

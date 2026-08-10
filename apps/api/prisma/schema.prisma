@@ -46,8 +46,35 @@ model Task {
   dueDate      DateTime?
   projectId    String
   project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  activities   Activity[]
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+}
+
+enum ActivityType {
+  UPDATED
+  CLEARED
+}
+
+enum ActivityField {
+  TITLE
+  DESCRIPTION
+  STATUS
+  PRIORITY
+  DUE_DATE
+}
+
+model Activity {
+  id          String @id @default(cuid())
+  taskId      String
+  task        Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  type        ActivityType
+  field       ActivityField
+  oldValue    String?
+  newValue    String?
+  createdAt   DateTime @default(now())
+
+  @@index([taskId, createdAt])
 }

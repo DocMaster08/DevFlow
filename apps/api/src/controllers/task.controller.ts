@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { createTask, getTask, getTasks, updateTask } from "../services/task.service.js";
+import { createTask, getTask, getTaskActivities, getTasks, updateTask } from "../services/task.service.js";
 import { createTaskSchema, updateTaskSchema } from "../schemas/task.schema.js";
 import { InvalidIdError } from "../errors/InvalidIdError.js";
 
@@ -51,4 +51,16 @@ export async function updateTaskController(req: Request, res: Response){
     const task = await updateTask(id, data)
 
     res.status(200).json(task)
+}
+
+export async function getTaskActivitiesController(req: Request, res: Response){
+    const {taskId} = req.params
+
+    if (!taskId || Array.isArray(taskId)){
+        throw new InvalidIdError("Invalid Task Identifier")
+    }
+
+    const activities = await getTaskActivities(taskId)
+
+    res.status(200).json(activities)
 }

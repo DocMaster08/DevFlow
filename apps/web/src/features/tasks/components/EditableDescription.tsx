@@ -30,7 +30,7 @@ function EditableDescription({ taskId, description }: EditableDescriptionProps) 
     }
 
     updateTaskMutation.mutate(
-      { description: newDescription },
+      { description: newDescription === "" ? null : newDescription },
       {
         onSuccess() {
           inline.stopEditing()
@@ -66,7 +66,7 @@ function EditableDescription({ taskId, description }: EditableDescriptionProps) 
           }}
         >
           <p>
-            {description||"No description"}
+            {description || "No description"}
             <span className="inline-flex items-center align-middle ml-1">
               <Edit size={14} color="orange" strokeOpacity={0.8} />
             </span>
