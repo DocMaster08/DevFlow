@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { formatDueDate } from "../../../utils/formatDueDate"
+import { formatDueDate } from "../../../utils/formatDate"
 import { CalendarWithTime } from "@/components/common/CalenderWithTime"
 import { useEffect, useState } from "react"
 import { useUpdateTask } from "../hooks/useUpdateTask"
@@ -24,7 +24,7 @@ function TaskDueDateProperty({ taskId, date }: TaskDueDatePropertyProps) {
     function handleDateChange(value: string) {
         setDraftDate(value)
 
-        if (value === null && value !== draftDate) {
+        if (value === null && value !== date) {
             updateTaskMutation.mutate({ dueDate: null })
             setOpen(false)
         }

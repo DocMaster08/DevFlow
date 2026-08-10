@@ -1,10 +1,25 @@
+import { Spinner } from "@/components/ui/spinner"
 import ActivityItem from "../components/ActivityItem"
-import { mockActivities } from "../utils/mockActivities"
+import { useTaskActivities } from "../hooks/useTaskActivities"
 
-function TaskActivity() {
+interface TaskActivityProps {
+  taskId: string
+}
+
+function TaskActivity({ taskId }: TaskActivityProps) {
+
+  const { data: activities, isLoading, isError } = useTaskActivities(taskId)
+
+  if (isError) {
+    return <h1>Error getting task activities</h1>
+  }
+  if (isLoading) {
+    return <Spinner />
+  }
+
   return (
     <div className="p-4">
-      {mockActivities.map(activity => <ActivityItem key={activity.id} activity={activity} />)}
+      {activities.map(activity => <ActivityItem key={activity.id} activity={activity} />)}
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover'
 import { Button } from '../ui/button'
 import { CalendarWithTime } from './CalenderWithTime'
-import { formatDueDate } from '@/utils/formatDueDate'
+import { formatDueDate } from '@/utils/formatDate'
 
 interface CalendarWithTimeFieldProps<TFieldValues extends FieldValues> {
     form: UseFormReturn<TFieldValues>

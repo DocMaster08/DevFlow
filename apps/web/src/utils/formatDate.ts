@@ -18,6 +18,25 @@ export function formatDueDate(date: string) {
 
 }
 
+export function formatDatetime(date: string) {
+    const today = new Date()
+    const givenDate = new Date(date)
+
+    const diff = getTimeDifference(givenDate, today)
+
+
+    if (diff.days >= 60) return `${Math.floor(diff.days / 30)} Months Ago`
+    if (diff.days >= 30) return "Last Month";
+    if (diff.days >= 14) return `${Math.floor(diff.days / 7)} Weeks Ago`
+    if (diff.days >= 7) return "Last Week";
+    if (diff.days >= 2) return `${diff.days} Days Ago`
+    if (diff.days === 1) return "Yesterday"
+    if (diff.hours > 3) return "Today"
+    if (diff.hours > 0) return `${diff.hours} Hour${diff.hours > 1 ? 's' : ''} Ago`
+    if (diff.minutes > 0) return `${diff.minutes} Minute${diff.minutes > 1 ? 's' : ''} Ago`
+    return "Now"
+}
+
 function getTimeDifference(start: Date, end: Date) {
     const ms = end.getTime() - start.getTime();
 

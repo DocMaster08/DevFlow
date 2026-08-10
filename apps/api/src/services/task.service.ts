@@ -175,8 +175,11 @@ export async function getTaskActivities(taskId: string) {
         where: {
             taskId
         },
-        orderBy:{
-            createdAt:"desc"
+        orderBy: {
+            createdAt: "desc"
+        },
+        omit: {
+            taskId: true
         }
     })
 }

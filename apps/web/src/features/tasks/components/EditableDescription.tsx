@@ -17,20 +17,20 @@ function EditableDescription({ taskId, description }: EditableDescriptionProps) 
   function saveTask() {
     if (updateTaskMutation.isPending) return;
 
-    const newDescription = inline.draft.trim();
+    const newDescription = inline.draft.trim() === ""?null: inline.draft.trim();
 
     if (newDescription === description) {
       inline.stopEditing()
       return;
     }
 
-    if (newDescription.length > 0 && newDescription.length < 3) {
+    if (newDescription && newDescription.length > 0 && newDescription.length < 3) {
       toast.error("Description must contain at least 3 characters");
       return;
     }
 
     updateTaskMutation.mutate(
-      { description: newDescription === "" ? null : newDescription },
+      { description: newDescription },
       {
         onSuccess() {
           inline.stopEditing()

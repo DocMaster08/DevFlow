@@ -30,9 +30,9 @@ function TaskDetailsPage() {
     <div>
       {task && (
         <div>
-          <TaskHeader taskId={taskId} title={task.title}/>
-          <TaskWorkspace task={task}/>
-          <TaskActivity/>
+          <TaskHeader taskId={taskId} title={task.title} />
+          <TaskWorkspace task={task} />
+          <TaskActivity taskId={taskId} />
         </div>
       )}
     </div>

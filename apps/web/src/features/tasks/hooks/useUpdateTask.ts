@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { taskKeys } from "../utils/queryKeys";
+import { activityKeys, taskKeys } from "../utils/queryKeys";
 import { toast } from "sonner";
 import { updateTask } from "../api/updateTask";
 import type { Task } from "@/types/task";
@@ -23,6 +23,9 @@ export function useUpdateTask(id: string) {
         onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: taskKeys.byId(id)
+            })
+            queryClient.invalidateQueries({
+                queryKey: activityKeys.byTask(id)
             })
         },
 
