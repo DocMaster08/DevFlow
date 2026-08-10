@@ -21,7 +21,7 @@ function ProjectPage() {
   }
 
   return (
-    <div>
+    <div className="p-6">
       {project && tasks && <>
 
         <ProjectHeader project={project} />

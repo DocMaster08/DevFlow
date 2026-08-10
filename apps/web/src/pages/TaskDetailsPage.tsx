@@ -27,9 +27,9 @@ function TaskDetailsPage() {
   }
 
   return (
-    <div className="">
+    <div>
       {task && (
-        <div className="p-4">
+        <div>
           <TaskHeader taskId={taskId} title={task.title}/>
           <TaskWorkspace task={task}/>
           <TaskActivity/>

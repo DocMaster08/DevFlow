@@ -60,13 +60,13 @@ function EditableDescription({ taskId, description }: EditableDescriptionProps) 
         />
       ) : (
         <button
-          className="text-primary text-left"
+          className="text-primary text-left max-w-4/5"
           onClick={() => {
             inline.startEditing()
           }}
         >
-          <p className="max-w-2/3">
-            {description}
+          <p>
+            {description||"No description"}
             <span className="inline-flex items-center align-middle ml-1">
               <Edit size={14} color="orange" strokeOpacity={0.8} />
             </span>

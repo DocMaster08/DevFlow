@@ -4,6 +4,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group"
 import { useState } from "react"
 import { Separator } from "../ui/separator"
+import { Button } from "../ui/button"
 
 interface CalendarWithTimeProps {
     value?: string
@@ -36,6 +37,10 @@ export function CalendarWithTime({ value, onChange }: CalendarWithTimeProps) {
         emitCombined(date, e.target.value)
     }
 
+    const clearDueDate = () => {
+        onChange(null)
+    }
+
     return (
         <div className="self-center flex flex-col gap-5 p-4">
             <Calendar
@@ -63,6 +68,9 @@ export function CalendarWithTime({ value, onChange }: CalendarWithTimeProps) {
                             <Clock2Icon className="text-muted-foreground" />
                         </InputGroupAddon>
                     </InputGroup>
+                </Field>
+                <Field>
+                    <Button onClick={clearDueDate} variant="outline">clear due date</Button>
                 </Field>
             </FieldGroup>
         </div>

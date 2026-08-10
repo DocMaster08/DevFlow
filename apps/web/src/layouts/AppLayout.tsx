@@ -10,7 +10,7 @@ function AppLayout() {
                 <AppSidebar />
                 <div className="flex-1">
                     <Navbar/>
-                    <main className=" p-6 overflow-auto">
+                    <main className="overflow-auto">
                         <Outlet />
                     </main>
                 </div>

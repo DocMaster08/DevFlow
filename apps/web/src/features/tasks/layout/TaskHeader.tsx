@@ -7,7 +7,7 @@ interface TaskHeaderProps {
 
 function TaskHeader({taskId, title}:TaskHeaderProps) {
   return (
-    <div className="mb-8">
+    <div className="p-6">
         <EditableTitle taskId={taskId} title={title} />
     </div>
   )

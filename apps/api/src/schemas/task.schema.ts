@@ -17,7 +17,9 @@ export const createTaskSchema = taskFieldsSchema.omit({
 
 export type createTaskDTO = z.infer<typeof createTaskSchema>
 
-export const updateTaskSchema = taskFieldsSchema.partial().refine(
+export const updateTaskSchema = taskFieldsSchema.partial().extend({
+    dueDate: z.iso.datetime().nullable().optional()
+}).refine(
     data => Object.keys(data).length > 0,
     {
         message: "At least one field is required"

@@ -8,7 +8,7 @@ interface TaskContentProps {
 
 function TaskContent({ task }: TaskContentProps) {
     return (
-        <div className="w-2/3 bg-card p-4">
+        <div className="w-1/2 bg-card p-4">
             <Field>
                 <FieldLabel>Description:</FieldLabel>
                 <EditableDescription taskId={task.id} description={task.description} />

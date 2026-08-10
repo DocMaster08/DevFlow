@@ -4,7 +4,7 @@ import { Field, FieldError, FieldLabel } from '../ui/field'
 import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover'
 import { Button } from '../ui/button'
 import { CalendarWithTime } from './CalenderWithTime'
-import { datetimeToString } from '@/features/tasks/utils/datetimeToString'
+import { formatDueDate } from '@/utils/formatDueDate'
 
 interface CalendarWithTimeFieldProps<TFieldValues extends FieldValues> {
     form: UseFormReturn<TFieldValues>
@@ -24,7 +24,7 @@ function CalendarWithTimeField<TFieldValues extends FieldValues>({ form, name, p
                     <FieldLabel htmlFor={field.name}>{name}</FieldLabel>
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
-                            <Button variant="outline">{field.value ? datetimeToString(field.value) : placeholder}</Button>
+                            <Button variant="outline">{field.value ? formatDueDate(field.value) : placeholder}</Button>
                         </PopoverTrigger>
                         <PopoverContent
                             onKeyDown={(e) => {

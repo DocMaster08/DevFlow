@@ -8,7 +8,7 @@ interface TaskWorkspaceProps {
 
 function TaskWorkspace({ task }: TaskWorkspaceProps) {
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <TaskContent task={task} />
       <TaskMetadata task={task} />
     </div>
