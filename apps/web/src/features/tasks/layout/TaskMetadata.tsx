@@ -1,27 +1,22 @@
-import type z from "zod"
-import TaskPrioritySelect from "../components/TaskPrioritySelect"
-import TaskStatusSelect from "../components/TaskStatusSelect"
-import { taskFieldsSchema } from "../schemas/taskFields.schema"
-import { Separator } from "@/components/ui/separator"
-
-const taskMetadataSchema = taskFieldsSchema.omit({
-    title: true,
-    description: true
-})
-
-type taskMetadataDTO = z.infer<typeof taskMetadataSchema>
+import TaskPriorityProperty from "../components/TaskPriorityProperty"
+import TaskStatusProperty from "../components/TaskStatusProperty"
+import type { Task } from "@/types/task"
+import MetadataItem from "./MetadataItem"
+import { ListOrdered, Notebook } from "lucide-react"
 
 interface TaskMetadataProps {
-    taskId: string
-    taskFields: taskMetadataDTO
+    task: Task
 }
 
-function TaskMetadata({ taskId, taskFields }: TaskMetadataProps) {
+function TaskMetadata({ task }: TaskMetadataProps) {
     return (
-        <div className="bg-sidebar w-1/3 p-4 flex flex-col gap-4">
-            <TaskStatusSelect taskId={taskId} status={taskFields.status} />
-            <Separator/>
-            <TaskPrioritySelect taskId={taskId} priority={taskFields.priority} />
+        <div className="bg-sidebar w-1/3 p-4 flex flex-col gap-8">
+            <MetadataItem label="status" icon={Notebook}>
+                <TaskStatusProperty taskId={task.id} status={task.status} />
+            </MetadataItem>
+            <MetadataItem label="priority" icon={ListOrdered}>
+                <TaskPriorityProperty taskId={task.id} priority={task.priority} />
+            </MetadataItem>
 
         </div>
     )

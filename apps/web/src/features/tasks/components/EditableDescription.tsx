@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { Edit } from "lucide-react";
+import { useInlineEdit } from "@/hooks/useInlineEdit";
 
 interface EditableDescriptionProps {
   taskId: string;
@@ -10,31 +10,17 @@ interface EditableDescriptionProps {
 }
 
 function EditableDescription({ taskId, description }: EditableDescriptionProps) {
-  const [editing, setEditing] = useState(false);
-  const [draftDescription, setDraftDescription] = useState(description);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    if (editing && inputRef.current) {
-      inputRef.current.focus();
-      // Optional: select all text on focus
-      inputRef.current.select();
-    }
-  }, [editing]);
-
-  useEffect(() => {
-    setDraftDescription(description);
-  }, [description]);
+  const inline = useInlineEdit<HTMLTextAreaElement>(description)
 
   const updateTaskMutation = useUpdateTask(taskId);
 
   function saveTask() {
     if (updateTaskMutation.isPending) return;
 
-    const newDescription = draftDescription.trim();
+    const newDescription = inline.draft.trim();
 
     if (newDescription === description) {
-      setEditing(false);
+      inline.stopEditing()
       return;
     }
 
@@ -47,46 +33,45 @@ function EditableDescription({ taskId, description }: EditableDescriptionProps) 
       { description: newDescription },
       {
         onSuccess() {
-          setEditing(false);
+          inline.stopEditing()
         },
       },
     );
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && e.ctrlKey) {
       saveTask();
     } else if (e.key === "Escape") {
-      setEditing(false);
-      setDraftDescription(description);
+      inline.cancelEditing()
     }
   }
 
   return (
     <div>
-      {editing ? (
+      {inline.editing ? (
         <Textarea
-          ref={inputRef}
+          ref={inline.inputRef}
           className="w-fit"
-          value={draftDescription}
-          onChange={(e) => setDraftDescription(e.target.value)}
+          value={inline.draft}
+          onChange={(e) => inline.setDraft(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={saveTask}
         />
       ) : (
         <button
-        className="text-primary text-left"
+          className="text-primary text-left"
           onClick={() => {
-            setEditing(true);
+            inline.startEditing()
           }}
         >
           <p className="max-w-2/3">
             {description}
             <span className="inline-flex items-center align-middle ml-1">
-              <Edit size={14} />
+              <Edit size={14} color="orange" strokeOpacity={0.8} />
             </span>
           </p>
-          
+
         </button>
       )}
     </div>

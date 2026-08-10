@@ -1,8 +1,8 @@
 import { Input } from "@/components/ui/input";
-import { useEffect, useRef, useState } from "react";
 import { useUpdateTask } from "../hooks/useUpdateTask";
 import { toast } from "sonner";
 import { Edit } from "lucide-react";
+import { useInlineEdit } from "@/hooks/useInlineEdit";
 
 interface EditableTitleProps {
   taskId: string;
@@ -10,31 +10,17 @@ interface EditableTitleProps {
 }
 
 function EditableTitle({ taskId, title }: EditableTitleProps) {
-  const [editing, setEditing] = useState(false);
-  const [draftTitle, setDraftTitle] = useState(title);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (editing && inputRef.current) {
-      inputRef.current.focus();
-      // Optional: select all text on focus
-      inputRef.current.select();
-    }
-  }, [editing]);
-
-  useEffect(() => {
-    setDraftTitle(title);
-  }, [title]);
+  const inline = useInlineEdit<HTMLInputElement>(title)
 
   const updateTaskMutation = useUpdateTask(taskId);
 
   function saveTask() {
     if (updateTaskMutation.isPending) return;
 
-    const newTitle = draftTitle.trim();
+    const newTitle = inline.draft.trim();
 
     if (newTitle === title) {
-      setEditing(false);
+      inline.stopEditing();
       return;
     }
 
@@ -47,7 +33,7 @@ function EditableTitle({ taskId, title }: EditableTitleProps) {
       { title: newTitle },
       {
         onSuccess() {
-          setEditing(false);
+          inline.stopEditing();
         },
       },
     );
@@ -57,30 +43,29 @@ function EditableTitle({ taskId, title }: EditableTitleProps) {
     if (e.key === "Enter") {
       saveTask();
     } else if (e.key === "Escape") {
-      setEditing(false);
-      setDraftTitle(title);
+      inline.cancelEditing()
     }
   }
 
   return (
     <div>
-      {editing ? (
+      {inline.editing ? (
         <Input
-          ref={inputRef}
+          ref={inline.inputRef}
           className="w-fit"
-          value={draftTitle}
-          onChange={(e) => setDraftTitle(e.target.value)}
+          value={inline.draft}
+          onChange={(e) => inline.setDraft(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={saveTask}
         />
       ) : (
         <button className="text-xl font-semibold flex items-center gap-2"
           onClick={() => {
-            setEditing(true);
+            inline.startEditing();
           }}
         >
           {title}
-          <Edit size={18}/>
+          <Edit size={18} color="orange" strokeOpacity={0.8} />
         </button>
       )}
     </div>
