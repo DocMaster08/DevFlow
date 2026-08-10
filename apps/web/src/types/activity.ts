@@ -8,7 +8,7 @@ export type Activity = {
     id: string
     type: ActivityType
     field: ActivityField
-    oldValue: string
-    newValue: string
+    oldValue: string | null
+    newValue: string | null
     createdAt: string
 }
