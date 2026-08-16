@@ -12,7 +12,7 @@ interface TaskMetadataProps {
 
 function TaskMetadata({ task }: TaskMetadataProps) {
 
-    const updateTaskMutation = useUpdateTask(task.id)
+    const updateTaskMutation = useUpdateTask(task.id, task.projectId)
 
     function handleStatusChange(value: TaskStatus) {
         updateTaskMutation.mutate({ status: value })
@@ -40,7 +40,7 @@ function TaskMetadata({ task }: TaskMetadataProps) {
                 <TaskPriorityProperty priority={task.priority} onChange={handlePriorityChange} pending={updateTaskMutation.isPending} />
             </MetadataItem>
             <MetadataItem label="due date" icon={Calendar}>
-                <TaskDueDateProperty date={task.dueDate} onChange={handleDateChange} onClear={handleDateClear} />
+                <TaskDueDateProperty date={task.dueDate} onChange={handleDateChange} onClear={handleDateClear} pending={updateTaskMutation.isPending} />
             </MetadataItem>
 
         </div>

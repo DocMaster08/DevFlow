@@ -5,46 +5,52 @@ import { updateTask } from "../api/updateTask";
 import type { Task } from "@/types/task";
 import type { updateTaskDTO } from "../schemas/updateTask.schema";
 
-export function useUpdateTask(id: string, projectId?: string) {
+export function useUpdateTask(id: string, projectId: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (data: updateTaskDTO) => updateTask(id, data),
         onMutate: async (data: updateTaskDTO) => {
-            const task_key = projectId ? taskKeys.byProject(projectId) : taskKeys.byId(id)
-            await queryClient.cancelQueries({
-                queryKey: task_key
-            })
-            if (projectId) {
-                const previousTasks = queryClient.getQueryData<Task[]>(task_key)
-                if (!previousTasks) return;
 
-                queryClient.setQueryData(task_key, previousTasks.map(task => { return task.id === id ? { ...task, ...data } : task }))
-                return { previousTasks }
+            await queryClient.cancelQueries({
+                queryKey: taskKeys.byId(id)
+            })
+
+            await queryClient.cancelQueries({
+                queryKey: taskKeys.byProject(projectId)
+            })
+
+
+            if (projectId) {
+
             }
 
 
-            const previousTask = queryClient.getQueryData<Task>(task_key)
-            if (!previousTask) return;
+            const previousTask = queryClient.getQueryData<Task>(taskKeys.byId(id))
 
-            queryClient.setQueryData(task_key, { ...previousTask, ...data })
-            return { previousTask }
+            if (previousTask) queryClient.setQueryData(taskKeys.byId(id), { ...previousTask, ...data })
+
+
+            const previousTasks = queryClient.getQueryData<Task[]>(taskKeys.byProject(projectId))
+
+            if (previousTasks) queryClient.setQueryData(taskKeys.byProject(projectId), previousTasks.map(task => { return task.id === id ? { ...task, ...data } : task }))
+
+            return { previousTask, previousTasks }
 
         },
         onSettled: () => {
 
-            if (projectId) {
-                queryClient.invalidateQueries({
-                    queryKey: taskKeys.byProject(projectId)
-                })
-            } else {
-                queryClient.invalidateQueries({
-                    queryKey: taskKeys.byId(id)
-                })
-                queryClient.invalidateQueries({
-                    queryKey: activityKeys.byTask(id)
-                })
-            }
+            queryClient.invalidateQueries({
+                queryKey: taskKeys.byProject(projectId)
+            })
+
+            queryClient.invalidateQueries({
+                queryKey: taskKeys.byId(id)
+            })
+            queryClient.invalidateQueries({
+                queryKey: activityKeys.byTask(id)
+            })
+
         },
 
         onSuccess: () => {

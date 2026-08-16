@@ -28,8 +28,8 @@ function TaskCard({ task }: TaskCardProps) {
         updateTaskMutation.mutate({ dueDate: value })
     }
 
-    function handleDateClear(){
-        updateTaskMutation.mutate({dueDate:null})
+    function handleDateClear() {
+        updateTaskMutation.mutate({ dueDate: null })
     }
 
     return (
@@ -49,7 +49,7 @@ function TaskCard({ task }: TaskCardProps) {
             <ItemActions>
 
                 <TaskPriorityProperty priority={task.priority} onChange={handlePriorityChange} pending={updateTaskMutation.isPending} />
-                <TaskDueDateProperty date={task.dueDate} onChange={handleDateChange} onClear={handleDateClear} />
+                <TaskDueDateProperty date={task.dueDate} onChange={handleDateChange} onClear={handleDateClear} pending={updateTaskMutation.isPending} />
             </ItemActions>
 
         </Item>

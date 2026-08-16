@@ -9,10 +9,11 @@ interface TaskDueDatePropertyProps {
     date: Task["dueDate"]
     onClear: ()=>void
     onChange: (value:string)=>void
+    pending: boolean
    
 }
 
-function TaskDueDateProperty({ date, onChange, onClear }: TaskDueDatePropertyProps) {
+function TaskDueDateProperty({ date, onChange, onClear, pending }: TaskDueDatePropertyProps) {
     const [draftDate, setDraftDate] = useState(date)
     const [open, setOpen] = useState(false)
 
@@ -38,7 +39,7 @@ function TaskDueDateProperty({ date, onChange, onClear }: TaskDueDatePropertyPro
     return (
         <Popover open={open} onOpenChange={handleOpenChange}>
             <PopoverTrigger asChild>
-                <Button variant="outline">{date ? formatDueDate(date) : "No Due Date"}</Button>
+                <Button disabled={pending} variant="outline">{date ? formatDueDate(date) : "No Due Date"}</Button>
             </PopoverTrigger>
             <PopoverContent side="left">
                 <CalendarWithTime value={draftDate} onChange={handleDateChange} />
