@@ -20,6 +20,8 @@ function ProjectPage() {
     return <h1>Error getting project data</h1>
   }
 
+  console.log(tasks)
+  
   return (
     <div className="p-6">
       {project && tasks && <>

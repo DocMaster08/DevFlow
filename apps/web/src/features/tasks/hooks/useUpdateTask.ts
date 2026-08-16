@@ -5,42 +5,64 @@ import { updateTask } from "../api/updateTask";
 import type { Task } from "@/types/task";
 import type { updateTaskDTO } from "../schemas/updateTask.schema";
 
-export function useUpdateTask(id: string) {
+export function useUpdateTask(id: string, projectId?: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (data:updateTaskDTO) => updateTask(id, data),
+        mutationFn: (data: updateTaskDTO) => updateTask(id, data),
         onMutate: async (data: updateTaskDTO) => {
+            const task_key = projectId ? taskKeys.byProject(projectId) : taskKeys.byId(id)
             await queryClient.cancelQueries({
-                queryKey: taskKeys.byId(id)
+                queryKey: task_key
             })
-            const previousTask = queryClient.getQueryData<Task>(taskKeys.byId(id))
+            if (projectId) {
+                const previousTasks = queryClient.getQueryData<Task[]>(task_key)
+                if (!previousTasks) return;
+
+                queryClient.setQueryData(task_key, previousTasks.map(task => { return task.id === id ? { ...task, ...data } : task }))
+                return { previousTasks }
+            }
+
+
+            const previousTask = queryClient.getQueryData<Task>(task_key)
             if (!previousTask) return;
 
-            queryClient.setQueryData(taskKeys.byId(id), {...previousTask, ...data})
-            return {previousTask}
+            queryClient.setQueryData(task_key, { ...previousTask, ...data })
+            return { previousTask }
+
         },
         onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: taskKeys.byId(id)
-            })
-            queryClient.invalidateQueries({
-                queryKey: activityKeys.byTask(id)
-            })
+
+            if (projectId) {
+                queryClient.invalidateQueries({
+                    queryKey: taskKeys.byProject(projectId)
+                })
+            } else {
+                queryClient.invalidateQueries({
+                    queryKey: taskKeys.byId(id)
+                })
+                queryClient.invalidateQueries({
+                    queryKey: activityKeys.byTask(id)
+                })
+            }
         },
 
-        onSuccess: () =>{
+        onSuccess: () => {
             toast.success("Task updated Successfully")
         },
 
         onError(_, __, context) {
-            const {previousTask} = context??undefined
+            const { previousTask, previousTasks } = context ?? undefined
             if (previousTask) {
                 queryClient.setQueryData(
                     taskKeys.byId(id), previousTask
                 )
             }
-
+            if (previousTasks) {
+                queryClient.setQueryData(
+                    taskKeys.byProject(projectId), previousTasks
+                )
+            }
             toast.error("Failed to update Task")
         }
 

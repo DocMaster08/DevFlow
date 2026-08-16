@@ -1,32 +1,23 @@
 import type { TaskStatus } from "@/types/task"
-import { useUpdateTask } from "../hooks/useUpdateTask"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { statusItems } from "../utils/selectItems"
 
 interface TaskStatusPropertyProps {
-    taskId: string
     status: TaskStatus
+    onChange: (value:TaskStatus)=>void
+    pending: boolean
 }
 
-function TaskStatusProperty({ taskId, status }: TaskStatusPropertyProps) {
-
-    const updateTaskMutation = useUpdateTask(taskId);
-
-    function handleStatusChange(value: TaskStatus) {
-        updateTaskMutation.mutate({ status: value }
-
-        )
-    }
-
+function TaskStatusProperty({ status, onChange, pending }: TaskStatusPropertyProps) {
     return (
         <div className="w-fit">
             <Select
                 name="status"
                 value={status}
-                onValueChange={handleStatusChange}
+                onValueChange={onChange}
 
             >
-                <SelectTrigger id="status" disabled={updateTaskMutation.isPending} >
+                <SelectTrigger id="status" disabled={pending} >
                     <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent position='popper'>

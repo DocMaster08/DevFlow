@@ -1,38 +1,29 @@
 import type { TaskPriority } from "@/types/task"
-import { useUpdateTask } from "../hooks/useUpdateTask"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { priorityItems } from "../utils/selectItems"
 
 interface TaskPriorityPropertyProps {
-    taskId: string
     priority: TaskPriority
+    onChange:(value:TaskPriority)=>void
+    pending: boolean
 }
 
-function TaskPriorityProperty({ taskId, priority }: TaskPriorityPropertyProps) {
-
-    const updateTaskMutation = useUpdateTask(taskId);
-
-    function handlePriorityChange(value: TaskPriority) {
-        updateTaskMutation.mutate({ priority: value }
-
-        )
-    }
+function TaskPriorityProperty({ priority, onChange, pending}: TaskPriorityPropertyProps) {
 
     return (
         <div className="w-fit">
             <Select
                 name="priority"
                 value={priority}
-                onValueChange={handlePriorityChange}
-
+                onValueChange={onChange}
             >
-                <SelectTrigger id="priority" disabled={updateTaskMutation.isPending} >
+                <SelectTrigger id="priority" disabled={pending} >
                     <SelectValue placeholder="Priority" />
                 </SelectTrigger>
                 <SelectContent position='popper'>
                     {priorityItems.map(item => <SelectItem key={item.value} value={item.value}>{item.label}</SelectItem>)}
                 </SelectContent>
-            </Select>
+            </Select>   
         </div>
     )
 }
