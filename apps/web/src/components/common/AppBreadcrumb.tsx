@@ -8,63 +8,81 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { useProject } from "@/features/projects/hooks/useProject";
-
-import { Link, useLocation } from "react-router";
-import { Spinner } from "../ui/spinner";
+import { Link, useMatches } from "react-router";
 import { useTask } from "@/features/tasks/hooks/useTask";
 
-interface Link {
-    name: string
-    url: string
+interface BreadcrumbHandle {
+    breadcrumb: string
 }
 
 export function AppBreadcrumb() {
-    const location = useLocation();
+    const matches = useMatches()
 
-    const items = location.pathname.split('/')
-    items.shift()
+    function getBreadcrumbName(type: string) {
+        switch (type) {
+            case "project":
+                return project?.name ?? "Project";
 
-    const projectId = items[0] === "projects" ? items[1] : undefined;
-    const taskId = items[2] === "tasks" ? items[3] : undefined;
+            case "task":
+                return task?.title ?? "Task";
+
+            default:
+                return type
+        }
+    }
+
+    const breadcrumbMatches = matches.filter(
+        match => (match.handle as BreadcrumbHandle)?.breadcrumb
+    );
+
+    const params = matches[matches.length - 1]?.params;
+
+    const projectId = params?.projectId;
+    const taskId = params?.taskId
 
     const { data: project, isLoading: isProjectLoading } = useProject(projectId);
     const { data: task, isLoading: isTaskLoading } = useTask(taskId);
 
+
     if (isProjectLoading || isTaskLoading) {
-        return <Spinner />
+        return null
     }
 
-    let links: Link[] = []
-    let page = items[0] || "dashboard";
+    const breadcrumbItems = breadcrumbMatches.map((match) => {
+        const type = (match.handle as BreadcrumbHandle)?.breadcrumb;
 
-    if (projectId && project) {
-        links.push({ name: page, url: "/projects" })
-        page = project.name
-    }
-
-    if (taskId && task) {
-        links.push({ name: page, url: `/projects/${projectId}` })
-        page = task.title
-    }
+        return {
+            name: getBreadcrumbName(type),
+            url: match.pathname
+        };
+    });
 
     return (
         <Breadcrumb>
             <BreadcrumbList>
                 {
-                    links.map((link, i) => <Fragment key={i}>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink asChild>
-                                <Link to={link.url}>{link.name}</Link>
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator />
-                    </Fragment>)
-                }
+                    breadcrumbItems.map((item, i) => {
+                        const isLast = i === breadcrumbItems.length - 1;
 
-                <BreadcrumbItem>
-                    <BreadcrumbPage>{page}</BreadcrumbPage>
-                </BreadcrumbItem>
+                        return <Fragment key={i} >
+                            <BreadcrumbItem>
+                                {isLast ? (
+                                    <BreadcrumbPage>
+                                        {item.name}
+                                    </BreadcrumbPage>
+                                ) : (
+                                    <BreadcrumbLink asChild>
+                                        <Link to={item.url}>
+                                            {item.name}
+                                        </Link>
+                                    </BreadcrumbLink>
+                                )}
+                            </BreadcrumbItem>
+                            {!isLast && <BreadcrumbSeparator />}
+                        </Fragment>
+                    })
+                }
             </BreadcrumbList>
-        </Breadcrumb>
+        </Breadcrumb >
     )
 }

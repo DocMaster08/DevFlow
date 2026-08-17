@@ -22,22 +22,49 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        handle: {
+          breadcrumb: "Dashboard"
+        },
         element: <DashboardPage />
       },
       {
-        path: "/projects/:projectId/tasks/:taskId",
-        element: <TaskDetailsPage />
+        path: "projects",
+        handle: {
+          breadcrumb: "Projects"
+        },
+        children: [
+          {
+            index: true,
+            element: <ProjectsPage />,
+          },
+          {
+            path: ":projectId",
+            handle: {
+              breadcrumb: "project"
+            },
+            children: [
+              {
+                index: true,
+                element: <ProjectPage />,
+              },
+              {
+                path: "tasks/:taskId",
+                handle: {
+                  breadcrumb: "task"
+                },
+                element: <TaskDetailsPage />
+              },
+
+            ]
+          },
+        ]
       },
-      {
-        path: "/projects/:projectId",
-        element: <ProjectPage />
-      },
-      {
-        path: "/projects",
-        element: <ProjectsPage />
-      },
+
       {
         path: "/settings",
+        handle: {
+          breadcrumb: "Settings"
+        },
         element: <SettingsPage />
       },
       {
