@@ -10,10 +10,7 @@ import {
 import { useProject } from "@/features/projects/hooks/useProject";
 import { Link, useMatches } from "react-router";
 import { useTask } from "@/features/tasks/hooks/useTask";
-
-interface BreadcrumbHandle {
-    breadcrumb: string
-}
+import { isBreadcrumbMatch, type BreadcrumbHandle } from "@/types/breadcrumb";
 
 export function AppBreadcrumb() {
     const matches = useMatches()
@@ -31,14 +28,18 @@ export function AppBreadcrumb() {
         }
     }
 
-    const breadcrumbMatches = matches.filter(
-        match => (match.handle as BreadcrumbHandle)?.breadcrumb
+    const breadcrumbMatches = matches.filter(isBreadcrumbMatch);
+
+    const projectMatch = breadcrumbMatches.find(
+        match => match.handle.breadcrumb === "project"
     );
 
-    const params = matches[matches.length - 1]?.params;
+    const taskMatch = breadcrumbMatches.find(
+        match => match.handle.breadcrumb === "task"
+    );
 
-    const projectId = params?.projectId;
-    const taskId = params?.taskId
+    const projectId = projectMatch?.params.projectId;
+    const taskId = taskMatch?.params.taskId;
 
     const { data: project, isLoading: isProjectLoading } = useProject(projectId);
     const { data: task, isLoading: isTaskLoading } = useTask(taskId);
