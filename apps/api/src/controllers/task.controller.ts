@@ -1,7 +1,8 @@
 import type { Request, Response } from "express";
-import { createTask, getTask, getTaskActivities, getTasks, updateTask } from "../services/task.service.js";
+import { createTask, createTaskComment, getTask, getTaskActivities, getTaskComments, getTasks, updateTask } from "../services/task.service.js";
 import { createTaskSchema, updateTaskSchema } from "../schemas/task.schema.js";
 import { InvalidIdError } from "../errors/InvalidIdError.js";
+import { createCommentSchema } from "../schemas/comment.schema.js";
 
 export async function createTaskController(req: Request, res: Response) {
     const data = createTaskSchema.parse(req.body)
@@ -40,9 +41,9 @@ export async function getTaskController(req: Request, res: Response) {
     res.status(200).json(task)
 }
 
-export async function updateTaskController(req: Request, res: Response){
+export async function updateTaskController(req: Request, res: Response) {
     const data = updateTaskSchema.parse(req.body)
-    const {id} = req.params
+    const { id } = req.params
 
     if (!id || Array.isArray(id)) {
         throw new InvalidIdError("invalid Task Identifier")
@@ -53,14 +54,39 @@ export async function updateTaskController(req: Request, res: Response){
     res.status(200).json(task)
 }
 
-export async function getTaskActivitiesController(req: Request, res: Response){
-    const {taskId} = req.params
+export async function getTaskActivitiesController(req: Request, res: Response) {
+    const { taskId } = req.params
 
-    if (!taskId || Array.isArray(taskId)){
+    if (!taskId || Array.isArray(taskId)) {
         throw new InvalidIdError("Invalid Task Identifier")
     }
 
     const activities = await getTaskActivities(taskId)
 
     res.status(200).json(activities)
+}
+
+export async function createTaskCommentController(req: Request, res: Response) {
+    const data = createCommentSchema.parse(req.body)
+    const { taskId } = req.params
+
+    if (!taskId || Array.isArray(taskId)) {
+        throw new InvalidIdError("Invalid Task Identifier")
+    }
+
+    const comment = await createTaskComment(taskId, data)
+
+    res.status(201).json(comment)
+}
+
+export async function getTaskCommentsController(req: Request, res: Response) {
+    const { taskId } = req.params
+
+    if (!taskId || Array.isArray(taskId)) {
+        throw new InvalidIdError("Invalid Task Identifier")
+    }
+
+    const comments = await getTaskComments(taskId)
+
+    res.status(200).json(comments)
 }

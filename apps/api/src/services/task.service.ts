@@ -3,6 +3,7 @@ import type { createTaskDTO, updateTaskDTO } from "../schemas/task.schema.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import { removeUndefined } from "../utils/cleanData.js";
 import type { createActivityType } from "../schemas/activity.schema.js";
+import type { createCommentDTO } from "../schemas/comment.schema.js";
 
 export async function createTask(projectId: string, data: createTaskDTO) {
     const project = await prisma.project.findUnique({
@@ -180,6 +181,50 @@ export async function getTaskActivities(taskId: string) {
         },
         omit: {
             taskId: true
+        }
+    })
+}
+
+export async function createTaskComment(taskId: string, data: createCommentDTO) {
+    const task = await prisma.task.findUnique({
+        where: {
+            id: taskId
+        }
+    })
+
+    if (!task) {
+        throw new NotFoundError("Task not found")
+    }
+
+    return prisma.comment.create({
+        data: {
+            taskId,
+            content: data.content
+        }
+    })
+
+}
+
+export async function getTaskComments(taskId: string) {
+    const task = await prisma.task.findUnique({
+        where: {
+            id: taskId
+        }
+    })
+
+    if (!task) {
+        throw new NotFoundError("Task not found")
+    }
+
+    return prisma.comment.findMany({
+        where:{
+            taskId
+        },
+        orderBy:{
+            createdAt:"desc"
+        },
+        omit:{
+            taskId:true
         }
     })
 }

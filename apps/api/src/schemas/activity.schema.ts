@@ -1,6 +1,6 @@
-import type { ActivityField, ActivityType, TaskStatus } from "../generated/prisma/enums.js"
+import type { ActivityField, ActivityType } from "../generated/prisma/enums.js"
 
-export type createActivityType = {
+export interface createActivityType {
     taskId: string
     type: ActivityType
     field: ActivityField
