@@ -19,8 +19,6 @@ function ProjectPage() {
   if (isProjectError || isTasksError) {
     return <h1>Error getting project data</h1>
   }
-
-  console.log(tasks)
   
   return (
     <div className="p-6">

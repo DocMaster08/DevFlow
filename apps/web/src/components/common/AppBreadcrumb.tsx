@@ -46,7 +46,7 @@ export function AppBreadcrumb() {
         links.push({ name: page, url: `/projects/${projectId}` })
         page = task.title
     }
-    console.log(links, page)
+
     return (
         <Breadcrumb>
             <BreadcrumbList>

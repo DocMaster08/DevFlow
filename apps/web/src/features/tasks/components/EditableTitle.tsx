@@ -7,12 +7,13 @@ import { useInlineEdit } from "@/hooks/useInlineEdit";
 interface EditableTitleProps {
   taskId: string;
   title: string;
+  projectId:string
 }
 
-function EditableTitle({ taskId, title }: EditableTitleProps) {
+function EditableTitle({ taskId, title, projectId }: EditableTitleProps) {
   const inline = useInlineEdit<HTMLInputElement>(title)
 
-  const updateTaskMutation = useUpdateTask(taskId);
+  const updateTaskMutation = useUpdateTask(taskId, projectId);
 
   function saveTask() {
     if (updateTaskMutation.isPending) return;

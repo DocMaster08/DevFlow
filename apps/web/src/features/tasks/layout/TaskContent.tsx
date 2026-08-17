@@ -11,7 +11,7 @@ function TaskContent({ task }: TaskContentProps) {
         <div className="w-1/2 bg-card p-4">
             <Field>
                 <FieldLabel>Description:</FieldLabel>
-                <EditableDescription taskId={task.id} description={task.description} />
+                <EditableDescription taskId={task.id} description={task.description} projectId={task.projectId} />
             </Field>
         </div>
     )

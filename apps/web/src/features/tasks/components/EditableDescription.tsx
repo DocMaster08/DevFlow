@@ -7,17 +7,18 @@ import { useInlineEdit } from "@/hooks/useInlineEdit";
 interface EditableDescriptionProps {
   taskId: string;
   description: string;
+  projectId: string;
 }
 
-function EditableDescription({ taskId, description }: EditableDescriptionProps) {
+function EditableDescription({ taskId, description, projectId }: EditableDescriptionProps) {
   const inline = useInlineEdit<HTMLTextAreaElement>(description)
 
-  const updateTaskMutation = useUpdateTask(taskId);
+  const updateTaskMutation = useUpdateTask(taskId, projectId);
 
   function saveTask() {
     if (updateTaskMutation.isPending) return;
 
-    const newDescription = inline.draft.trim() === ""?null: inline.draft.trim();
+    const newDescription = inline.draft.trim() === "" ? null : inline.draft.trim();
 
     if (newDescription === description) {
       inline.stopEditing()
