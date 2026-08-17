@@ -3,6 +3,7 @@ import { useProject } from "@/features/projects/hooks/useProject";
 import TaskBackButton from "@/features/tasks/components/TaskBackButton";
 import { useTask } from "@/features/tasks/hooks/useTask";
 import TaskActivity from "@/features/tasks/layout/TaskActivity";
+import TaskComments from "@/features/tasks/layout/TaskComments";
 import TaskHeader from "@/features/tasks/layout/TaskHeader";
 import TaskWorkspace from "@/features/tasks/layout/TaskWorkspace";
 import { useParams } from "react-router";
@@ -42,6 +43,7 @@ function TaskDetailsPage() {
           <TaskHeader taskId={taskId} title={task.title} projectId={projectId} />
           <TaskWorkspace task={task} />
           <TaskActivity taskId={taskId} />
+          <TaskComments taskId={taskId}/>
         </div>
       )}
     </div>

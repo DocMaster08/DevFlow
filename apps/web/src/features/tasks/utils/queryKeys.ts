@@ -7,3 +7,7 @@ export const taskKeys = {
 export const activityKeys = {
     byTask: (taskId:string) => ["activities", "task", taskId] as const,
 }
+
+export const commentKeys = {
+    byTask: (taskId:string) => ["comments", "task", taskId] as const
+}
