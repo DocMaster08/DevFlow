@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { createTaskCommentController, getTaskActivitiesController, getTaskCommentsController, getTaskController, updateTaskController } from "../controllers/task.controller.js";
-import { getTaskComments } from "../services/task.service.js";
 
 const router = Router()
 // /api/tasks

@@ -91,3 +91,13 @@ model Comment {
 
   @@index([taskId, createdAt])
 }
+
+model User {
+  id            String @id @default(cuid())
+  name          String
+  email         String @unique
+  passwordHash  String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

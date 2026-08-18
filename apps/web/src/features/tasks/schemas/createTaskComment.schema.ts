@@ -6,4 +6,4 @@ export const createTaskCommentSchema = z.object(
     }
 )
 
-export type createTaskCommentDTO = z.infer<typeof createTaskCommentSchema>
+export type CreateTaskCommentDTO = z.infer<typeof createTaskCommentSchema>

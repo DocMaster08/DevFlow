@@ -16,39 +16,45 @@ function CommentForm({ taskId }: CommentFormProps) {
     const createCommentMutation = useCreateTaskComment(taskId)
 
     function handleSubmit() {
-        if (!commentInput || commentInput.length > 1000) {
-            setError("invalid Input")
+        const newComment = commentInput.trim()
+        
+        if (newComment.length === 0) {
+            setError("Comment cannot be empty")
+            return
+        }
+        if (newComment.length > 1000) {
+            setError("Comment Is too large")
             return
         }
 
         createCommentMutation.mutate({
-            content: commentInput
+            content: newComment
         })
     }
 
-    function cancelCommenting(){
+    function cancelCommenting() {
         setCommentInput("")
     }
 
-    function handleKeyDown(e:React.KeyboardEvent<HTMLInputElement>){
-        if (e.key === "Enter" && e.ctrlKey){
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === "Enter" && e.ctrlKey) {
             handleSubmit()
-        }else if (e.key === "Escape"){
+        } else if (e.key === "Escape") {
             cancelCommenting()
         }
     }
 
     return (
-        <Field className="p-4" data-invalid={error!=null}>
-            <Input onKeyDown={handleKeyDown} value={commentInput} onChange={(e) => {setCommentInput(e.target.value); setError(null)}} aria-invalid={error!=null} placeholder="Add a comment..." />
+        <Field className="p-4" data-invalid={error != null}>
+            <Input onKeyDown={handleKeyDown} value={commentInput} onChange={(e) => { setCommentInput(e.target.value); setError(null) }} aria-invalid={error != null} placeholder="Add a comment..." />
             <FieldError>{error}</FieldError>
             <div className="flex items-center justify-between">
                 <div className="p-2 rounded-full hover:bg-muted">
-                    <SmilePlus size={20}  />
+                    <SmilePlus size={20} />
                 </div>
                 <div className="flex gap-2">
                     <Button onClick={cancelCommenting} variant="ghost">Cancel</Button>
-                    <Button disabled={commentInput.length===0 || commentInput.length>1000} onClick={handleSubmit}>Submit</Button>
+                    <Button disabled={commentInput.length === 0 || commentInput.length > 1000} onClick={handleSubmit}>Submit</Button>
                 </div>
             </div>
         </Field>

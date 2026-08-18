@@ -15,7 +15,7 @@ export const createTaskSchema = taskFieldsSchema.omit({
     status: true
 })
 
-export type createTaskDTO = z.infer<typeof createTaskSchema>
+export type CreateTaskDTO = z.infer<typeof createTaskSchema>
 
 export const updateTaskSchema = taskFieldsSchema.partial().extend({
     dueDate: z.iso.datetime().nullable().optional()
@@ -26,4 +26,4 @@ export const updateTaskSchema = taskFieldsSchema.partial().extend({
     }
 );
 
-export type updateTaskDTO = z.infer<typeof updateTaskSchema>
+export type UpdateTaskDTO = z.infer<typeof updateTaskSchema>

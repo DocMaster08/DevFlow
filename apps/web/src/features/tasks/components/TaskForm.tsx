@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import {
   createTaskSchema,
-  type createTaskDTO,
+  type CreateTaskDTO,
 } from "../schemas/createTask.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -21,12 +21,12 @@ import CalendarWithTimeField from "@/components/common/CalendarWithTimeField";
 import { priorityItems } from "../utils/selectItems";
 
 interface TaskFormProps {
-  onSubmit: (data: createTaskDTO) => void;
+  onSubmit: (data: CreateTaskDTO) => void;
   isSubmitting: boolean;
 }
 
 function TaskForm({ onSubmit, isSubmitting }: TaskFormProps) {
-  const form = useForm<createTaskDTO>({
+  const form = useForm<CreateTaskDTO>({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
       title: "",

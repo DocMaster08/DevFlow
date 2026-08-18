@@ -6,4 +6,4 @@ export const createTaskSchema = taskFieldsSchema.omit({
     status:true
 })
 
-export type createTaskDTO = z.infer<typeof createTaskSchema>
+export type CreateTaskDTO = z.infer<typeof createTaskSchema>

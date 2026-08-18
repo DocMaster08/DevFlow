@@ -1,11 +1,11 @@
 import { prisma } from "../config/prisma.js";
-import type { createTaskDTO, updateTaskDTO } from "../schemas/task.schema.js";
+import type { CreateTaskDTO, UpdateTaskDTO } from "../schemas/task.schema.js";
 import { NotFoundError } from "../errors/NotFoundError.js";
 import { removeUndefined } from "../utils/cleanData.js";
-import type { createActivityType } from "../schemas/activity.schema.js";
-import type { createCommentDTO } from "../schemas/comment.schema.js";
+import type { CreateActivityType } from "../schemas/activity.schema.js";
+import type { CreateCommentDTO } from "../schemas/comment.schema.js";
 
-export async function createTask(projectId: string, data: createTaskDTO) {
+export async function createTask(projectId: string, data: CreateTaskDTO) {
     const project = await prisma.project.findUnique({
         where: {
             id: projectId,
@@ -74,7 +74,7 @@ export async function getTask(id: string) {
     return task
 }
 
-export async function updateTask(id: string, data: updateTaskDTO) {
+export async function updateTask(id: string, data: UpdateTaskDTO) {
 
 
     return prisma.$transaction(async (tx) => {
@@ -88,7 +88,7 @@ export async function updateTask(id: string, data: updateTaskDTO) {
             throw new NotFoundError("Task not found")
         }
 
-        const activities: createActivityType[] = []
+        const activities: CreateActivityType[] = []
 
         if (data.status !== undefined && data.status !== task.status) {
             activities.push({
@@ -185,7 +185,7 @@ export async function getTaskActivities(taskId: string) {
     })
 }
 
-export async function createTaskComment(taskId: string, data: createCommentDTO) {
+export async function createTaskComment(taskId: string, data: CreateCommentDTO) {
     const task = await prisma.task.findUnique({
         where: {
             id: taskId
