@@ -18,7 +18,7 @@ function CreateProjectDialog() {
         data: CreateProjectDTO
     ) {
         createProjectMutation.mutate(data, {
-            onSuccess(){
+            onSuccess() {
                 setOpen(false)
             }
         });
@@ -34,7 +34,7 @@ function CreateProjectDialog() {
             </DialogTrigger>
             <DialogContent>
 
-                <ProjectForm onSubmit={ handleSubmit} isSubmitting={createProjectMutation.isPending}/>
+                <ProjectForm onSubmit={handleSubmit} isSubmitting={createProjectMutation.isPending} />
 
             </DialogContent>
 

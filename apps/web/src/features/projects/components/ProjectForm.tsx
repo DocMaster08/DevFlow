@@ -1,14 +1,11 @@
 import {
     Field,
     FieldDescription,
-    FieldError,
     FieldGroup,
     FieldLabel,
     FieldLegend,
     FieldSet,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import {
     Popover,
     PopoverContent,
@@ -47,9 +44,9 @@ function ProjectForm({ onSubmit, isSubmitting }: ProjectFormProps) {
                 <FieldLegend>Create New Project</FieldLegend>
                 <FieldDescription>This is where you manage your tasks.</FieldDescription>
                 <FieldGroup>
-                    <InputField form={form} name="name" placeholder="Project Name..." />
+                    <InputField form={form} name="name" label="Name" placeholder="Project Name..." />
 
-                    <TextareaField form={form} name="description" placeholder="Project Description..."/>
+                    <TextareaField form={form} name="description" label="Description" placeholder="Project Description..."/>
 
                     <Field>
                         <FieldLabel htmlFor="color">Project Color</FieldLabel>

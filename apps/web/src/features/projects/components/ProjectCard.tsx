@@ -1,16 +1,7 @@
 import type { Project } from "@/types/project"
-import {
-    Item,
-    ItemActions,
-    ItemContent,
-    ItemDescription,
-    ItemMedia,
-    ItemTitle,
-} from "@/components/ui/item"
-import { Button } from "@/components/ui/button"
 import { DynamicIcon } from "@/components/common/DynamicIcon"
 import { Link } from "react-router"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface ProjectCardProps {
     project: Project
@@ -36,22 +27,3 @@ function ProjectCard({ project }: ProjectCardProps) {
 }
 
 export default ProjectCard
-
-/*
-  <Item variant="outline" >
-                <ItemMedia variant="image">
-                    <DynamicIcon name={project.icon} />
-                </ItemMedia>
-                <ItemContent className="">
-
-                    <ItemTitle>{project.name}</ItemTitle>
-                    {project.description && <ItemDescription>{project.description}</ItemDescription>}
-
-                </ItemContent>
-
-                <ItemActions>
-                    <Button variant="secondary" className="group-hover:bg-accent">More</Button>
-                </ItemActions>
-            </Item>
-
-            */

@@ -5,17 +5,18 @@ import { Textarea } from '../ui/textarea'
 interface TextareaFieldProps<TFieldValues extends FieldValues> {
     form: UseFormReturn<TFieldValues>
     name: FieldPath<TFieldValues>
+    label: string,
     placeholder: string
 }
 
-function TextareaField<TFieldValues extends FieldValues>({ form, name, placeholder }: TextareaFieldProps<TFieldValues>) {
+function TextareaField<TFieldValues extends FieldValues>({ form, name, label, placeholder }: TextareaFieldProps<TFieldValues>) {
     return (
         <Controller
             name={name}
             control={form.control}
             render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>{name}</FieldLabel>
+                    <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
                     <Textarea
                         {...field}
                         id={field.name}
