@@ -5,10 +5,11 @@ import { removeUndefined } from "../utils/cleanData.js";
 import type { CreateActivityType } from "../schemas/activity.schema.js";
 import type { CreateCommentDTO } from "../schemas/comment.schema.js";
 
-export async function createTask(projectId: string, data: CreateTaskDTO) {
-    const project = await prisma.project.findUnique({
+export async function createTask(projectId: string, userId: string, data: CreateTaskDTO) {
+    const project = await prisma.project.findFirst({
         where: {
             id: projectId,
+            ownerId: userId
         },
         select: {
             id: true
@@ -32,11 +33,12 @@ export async function createTask(projectId: string, data: CreateTaskDTO) {
     )
 }
 
-export async function getTasks(projectId: string) {
+export async function getTasks(projectId: string, userId: string) {
 
     const project = await prisma.project.findUnique({
         where: {
             id: projectId,
+            ownerId: userId
         },
         select: {
             id: true
@@ -59,10 +61,13 @@ export async function getTasks(projectId: string) {
     })
 }
 
-export async function getTask(id: string) {
-    const task = await prisma.task.findUnique({
+export async function getTask(taskId: string, userId: string) {
+    const task = await prisma.task.findFirst({
         where: {
-            id
+            id: taskId,
+            project: {
+                ownerId: userId
+            }
         }
     })
 
@@ -74,13 +79,36 @@ export async function getTask(id: string) {
     return task
 }
 
-export async function updateTask(id: string, data: UpdateTaskDTO) {
+export async function deleteTask(taskId: string, userId: string) {
+    const task = await prisma.task.findFirst({
+        where: {
+            id: taskId,
+            project: {
+                ownerId: userId
+            }
+        }
+    })
 
+    if (!task) throw new NotFoundError("Task not found");
+
+    return prisma.task.delete({
+        where: {
+            id: taskId
+        }
+    })
+
+
+}
+
+export async function updateTask(taskId: string, userId: string, data: UpdateTaskDTO) {
 
     return prisma.$transaction(async (tx) => {
-        const task = await tx.task.findUnique({
+        const task = await tx.task.findFirst({
             where: {
-                id
+                id: taskId,
+                project: {
+                    ownerId: userId
+                }
             }
         })
 
@@ -92,7 +120,8 @@ export async function updateTask(id: string, data: UpdateTaskDTO) {
 
         if (data.status !== undefined && data.status !== task.status) {
             activities.push({
-                taskId: id,
+                taskId,
+                userId,
                 type: "UPDATED",
                 field: "STATUS",
                 oldValue: task.status,
@@ -102,7 +131,8 @@ export async function updateTask(id: string, data: UpdateTaskDTO) {
         }
         if (data.priority !== undefined && data.priority !== task.priority) {
             activities.push({
-                taskId: id,
+                taskId,
+                userId,
                 type: "UPDATED",
                 field: "PRIORITY",
                 oldValue: task.priority,
@@ -113,7 +143,8 @@ export async function updateTask(id: string, data: UpdateTaskDTO) {
         const oldDueDate = task.dueDate?.toISOString() ?? null
         if (data.dueDate !== undefined && data.dueDate !== oldDueDate) {
             activities.push({
-                taskId: id,
+                taskId,
+                userId,
                 type: data.dueDate ? "UPDATED" : "CLEARED",
                 field: "DUE_DATE",
                 oldValue: oldDueDate,
@@ -122,7 +153,8 @@ export async function updateTask(id: string, data: UpdateTaskDTO) {
         }
         if (data.title !== undefined && data.title !== task.title) {
             activities.push({
-                taskId: id,
+                taskId,
+                userId,
                 type: "UPDATED",
                 field: "TITLE",
                 oldValue: task.title,
@@ -131,7 +163,8 @@ export async function updateTask(id: string, data: UpdateTaskDTO) {
         }
         if (data.description !== undefined && data.description !== task.description) {
             activities.push({
-                taskId: id,
+                taskId,
+                userId,
                 type: data.description ? "UPDATED" : "CLEARED",
                 field: "DESCRIPTION",
                 oldValue: task.description,
@@ -142,7 +175,7 @@ export async function updateTask(id: string, data: UpdateTaskDTO) {
         const cleanData = removeUndefined(data)
         const updatedTask = await tx.task.update({
             where: {
-                id
+                id: taskId
             },
             data: cleanData
         })
@@ -161,10 +194,13 @@ export async function updateTask(id: string, data: UpdateTaskDTO) {
 }
 
 
-export async function getTaskActivities(taskId: string) {
+export async function getTaskActivities(taskId: string, userId: string) {
     const task = await prisma.task.findUnique({
         where: {
-            id: taskId
+            id: taskId,
+            project:{
+                ownerId:userId
+            }
         }
     })
 
@@ -176,19 +212,31 @@ export async function getTaskActivities(taskId: string) {
         where: {
             taskId
         },
+        include:{
+            user:{
+                select:{
+                    id: true,
+                    name: true
+                }
+            }
+        },
         orderBy: {
             createdAt: "desc"
         },
         omit: {
-            taskId: true
+            taskId: true,
+            userId: true,
         }
     })
 }
 
-export async function createTaskComment(taskId: string, data: CreateCommentDTO) {
-    const task = await prisma.task.findUnique({
+export async function createTaskComment(taskId: string, userId: string, data: CreateCommentDTO) {
+    const task = await prisma.task.findFirst({
         where: {
-            id: taskId
+            id: taskId,
+            project: {
+                ownerId: userId
+            }
         }
     })
 
@@ -199,16 +247,20 @@ export async function createTaskComment(taskId: string, data: CreateCommentDTO) 
     return prisma.comment.create({
         data: {
             taskId,
+            authorId: userId,
             content: data.content
         }
     })
 
 }
 
-export async function getTaskComments(taskId: string) {
+export async function getTaskComments(taskId: string, userId: string) {
     const task = await prisma.task.findUnique({
         where: {
-            id: taskId
+            id: taskId,
+            project: {
+                ownerId: userId
+            }
         }
     })
 
@@ -217,14 +269,23 @@ export async function getTaskComments(taskId: string) {
     }
 
     return prisma.comment.findMany({
-        where:{
+        where: {
             taskId
         },
-        orderBy:{
-            createdAt:"desc"
+        include: {
+            author: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            }
         },
-        omit:{
-            taskId:true
+        orderBy: {
+            createdAt: "desc"
+        },
+        omit: {
+            taskId: true,
+            authorId: true
         }
     })
 }

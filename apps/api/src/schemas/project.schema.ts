@@ -10,3 +10,7 @@ export const createProjectSchema = z.object(
 )
 
 export type CreateProjectDTO = z.infer<typeof createProjectSchema>
+
+export const updateProjectSchema = createProjectSchema.partial()
+
+export type UpdateProjectDTO = z.infer<typeof updateProjectSchema>

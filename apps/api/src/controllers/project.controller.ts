@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import { createProjectSchema } from "../schemas/project.schema.js";
-import { createProject, getProject, getProjects } from "../services/project.service.js";
+import { createProjectSchema, updateProjectSchema } from "../schemas/project.schema.js";
+import { createProject, deleteProject, getProject, getProjects, updateProject } from "../services/project.service.js";
 import { InvalidIdError } from "../errors/InvalidIdError.js";
 
 export async function createProjectController(
@@ -10,7 +10,7 @@ export async function createProjectController(
 
   const data = createProjectSchema.parse(req.body);
 
-  const project = await createProject(data);
+  const project = await createProject(data, req.user!.id);
 
   res.status(201).json(project);
 
@@ -18,7 +18,7 @@ export async function createProjectController(
 
 export async function getProjectsController(req: Request, res: Response) {
 
-  const projects = await getProjects();
+  const projects = await getProjects(req.user!.id);
 
   res.status(200).json(projects);
 
@@ -34,8 +34,33 @@ export async function getProjectController(
   if (!projectId || Array.isArray(projectId)) {
     throw new InvalidIdError("Invalid Project Identifier")
   }
-  const project = await getProject(projectId);
-  
+  const project = await getProject(projectId, req.user!.id);
+
   res.status(200).json(project);
 
+}
+
+export async function updateProjectController(req: Request, res: Response) {
+  const data = updateProjectSchema.parse(req.body)
+  const { projectId } = req.params;
+
+  if (!projectId || Array.isArray(projectId)) {
+    throw new InvalidIdError("Invalid Project Identifier")
+  }
+
+  const project = await updateProject(projectId, req.user!.id, data)
+
+  res.status(200).json(project);
+}
+
+export async function deleteProjectController(req: Request, res: Response){
+  const {projectId} = req.params;
+
+  if (!projectId || Array.isArray(projectId)){
+    throw new InvalidIdError("Invalid Project Identifier")
+  }
+
+  const project = await deleteProject(projectId, req.user!.id)
+
+  res.status(200).json(project)
 }

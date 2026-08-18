@@ -20,6 +20,8 @@ model Project {
   icon        String
   archived    Boolean @default(false)
   tasks       Task[]
+  ownerId     String
+  owner       User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -69,8 +71,12 @@ enum ActivityField {
 
 model Activity {
   id          String @id @default(cuid())
+
   taskId      String
   task        Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   type        ActivityType
   field       ActivityField
   oldValue    String?
@@ -79,17 +85,22 @@ model Activity {
   createdAt   DateTime @default(now())
 
   @@index([taskId, createdAt])
+  @@index([userId])
 }
 
 model Comment {
   id          String @id @default(cuid())
+  content     String
+
   taskId      String
   task        Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  content     String
+  authorId    String
+  author      User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
   @@index([taskId, createdAt])
+  @@index([authorId])
 }
 
 model User {
@@ -97,6 +108,10 @@ model User {
   name          String
   email         String @unique
   passwordHash  String
+
+  projects      Project[]
+  comments      Comment[]
+  activities    Activity[]
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
