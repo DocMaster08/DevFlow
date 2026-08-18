@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { loginSchema, registerSchema } from "../schemas/auth.schema.js";
 import { loginUser, registerUser } from "../services/auth.service.js";
+import { getCurrentUser } from "../services/user.service.js";
 
 export async function registerUserController(req: Request, res: Response) {
     const data = registerSchema.parse(req.body)
@@ -22,11 +23,7 @@ export async function getCurrentUserController(
     req: Request,
     res: Response
 ) {
-    res.json({
-        user: {
-            id: req.user!.id,
-            name: req.user!.name,
-            email: req.user!.email,
-        },
-    });
+    const user = await getCurrentUser(req.user!.id);
+
+    res.status(200).json(user)
 }

@@ -29,7 +29,7 @@ export async function authMiddleware(req: Request, _res: Response, next: NextFun
 
         if (!user) throw new UnauthorizedError("User no longer exists")
 
-        req.user = user
+        req.user = { id: user.id }
 
         next();
 

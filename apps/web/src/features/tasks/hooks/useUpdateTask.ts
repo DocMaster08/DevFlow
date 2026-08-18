@@ -3,14 +3,14 @@ import { activityKeys, taskKeys } from "../utils/queryKeys";
 import { toast } from "sonner";
 import { updateTask } from "../api/updateTask";
 import type { Task } from "@/types/task";
-import type { updateTaskDTO } from "../schemas/updateTask.schema";
+import type { UpdateTaskDTO } from "../schemas/updateTask.schema";
 
 export function useUpdateTask(id: string, projectId: string) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (data: updateTaskDTO) => updateTask(id, data),
-        onMutate: async (data: updateTaskDTO) => {
+        mutationFn: (data: UpdateTaskDTO) => updateTask(id, data),
+        onMutate: async (data: UpdateTaskDTO) => {
 
             await queryClient.cancelQueries({
                 queryKey: taskKeys.byId(id)
